@@ -2,6 +2,7 @@
 using System.Collections;
 
 [RequireComponent (typeof (Controller2D))]
+[RequireComponent (typeof (ControllerPhone))]
 public class Player : MonoBehaviour {
 
 	public float maxJumpHeight = 4;
@@ -30,8 +31,11 @@ public class Player : MonoBehaviour {
 
 	void Start() {
 		controller = GetComponent<Controller2D> ();
+		phone = GetComponent<ControllerPhone> ();
 
-//		print ("Width: " + phone.screenWidth + " Height: " + phone.screenHeight);
+		Vector2 phoneDimensions = phone.GetScreenDimensions ();
+		print ("Width: " + phoneDimensions.x + " Height: " + phoneDimensions.y);
+		print ("Other Width: " + Screen.width+ " Height: " + Screen.height);
 
 		gravity = -(2 * maxJumpHeight) / Mathf.Pow (timeToJumpApex, 2);
 		maxJumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
@@ -57,6 +61,7 @@ public class Player : MonoBehaviour {
 
 				if (nbTouches == 2)
 					input.y = 1;
+
 				controller.Move (velocity * Time.deltaTime, input);
 
 			}
