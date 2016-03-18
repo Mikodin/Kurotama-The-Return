@@ -35,7 +35,7 @@ public class Player : MonoBehaviour {
 
 		Vector2 phoneDimensions = phone.GetScreenDimensions ();
 		print ("Width: " + phoneDimensions.x + " Height: " + phoneDimensions.y);
-		print ("Other Width: " + Screen.width+ " Height: " + Screen.height);
+
 
 		gravity = -(2 * maxJumpHeight) / Mathf.Pow (timeToJumpApex, 2);
 		maxJumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
