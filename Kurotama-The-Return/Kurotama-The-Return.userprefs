@@ -1,11 +1,13 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\PlatformController.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Player.cs">
     <Files>
-      <File FileName="Assets\Scripts\PlatformController.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Player.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Controller2D.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\MobileInput.cs" Line="84" Column="3" />
+      <File FileName="Assets\Scripts\PlatformController.cs" Line="19" Column="7" />
+      <File FileName="Assets\Scripts\Player.cs" Line="45" Column="73" />
+      <File FileName="Assets\Scripts\Controller2D.cs" Line="208" Column="24" />
+      <File FileName="Assets\Scripts\MobileInput.cs" Line="122" Column="39" />
+      <File FileName="Assets\Scripts\RaycastController.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\CameraFollow.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
