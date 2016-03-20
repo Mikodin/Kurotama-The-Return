@@ -35,20 +35,22 @@ public class MobileInput : MonoBehaviour
 			switch (touch.phase) {
 
 			case TouchPhase.Began:
-				g1.SetStart(touch.position);
+				g1.SetStart (touch.position);
+				g1.SetGesture ("taphold");
 				break;
 
 			case TouchPhase.Moved:
-
-				break;
-
-			case TouchPhase.Ended:
 				g1.SetEnd (touch.position);
 				g1.CalculateDirection ();
 				print ("Gesture Direction: " + g1.GetDirection ());
 				g1.CalculateGesture ();
+				break;
+
+			case TouchPhase.Ended:
+
 
 				print (g1.GetGesture ());
+				g1.Reset ();
 				break;
 			}
 		}
@@ -78,6 +80,10 @@ public class MobileInput : MonoBehaviour
 		return noActionRadius;
 	}
 
+	public string GetGestures() {
+		return g1.GetGesture();
+	}
+
 	struct Pane
 	{
 		public float startPos;
@@ -105,7 +111,7 @@ public class MobileInput : MonoBehaviour
 		Vector2 end;
 		Vector2 direction; 
 		string gesture;
-		int noActionRadius;
+		float noActionRadius;
 
 		public Gesture (int i)
 		{
@@ -113,7 +119,7 @@ public class MobileInput : MonoBehaviour
 			end = new Vector2 (0, 0);
 			direction = new Vector2 (0, 0);
 			gesture = "";
-			noActionRadius = 30;
+			noActionRadius = (Screen.width/3)/5;
 		}
 
 		public void SetStart (Vector2 _start)
@@ -148,24 +154,23 @@ public class MobileInput : MonoBehaviour
 
 		public void CalculateGesture() {
 			if (Mathf.Abs (direction.x) < noActionRadius && Mathf.Abs (direction.y) < noActionRadius)
-				SetGesture ("running");
-			
+				SetGesture ("taphold");
 			else if (direction.x > noActionRadius && direction.y > noActionRadius)
-				SetGesture ("upRightJump");
+				SetGesture ("upright");
 			else if (direction.x < -noActionRadius && direction.y > noActionRadius)
-				SetGesture ("upLeftJump");
+				SetGesture ("upleft");
 			else if (direction.x < -noActionRadius && direction.y < -noActionRadius)
-				SetGesture ("btmLeftJump");
+				SetGesture ("downleft");
 			else if (direction.x > noActionRadius && direction.y < -noActionRadius)
-				SetGesture ("btmRightJump");
+				SetGesture ("downright");
 			else if ((direction.x > -noActionRadius || direction.x < noActionRadius) && direction.y > noActionRadius)
-				SetGesture ("VertJump");
+				SetGesture ("up");
 			else if ((direction.x > -noActionRadius || direction.x < noActionRadius) && direction.y < -noActionRadius)
-				SetGesture ("Crouch");
+				SetGesture ("down");
 			else if ((direction.y > -noActionRadius || direction.y < noActionRadius) && direction.x > noActionRadius)
-				SetGesture ("RightSwipe");
+				SetGesture ("right");
 			else if ((direction.y > -noActionRadius || direction.y < noActionRadius) && direction.x < -noActionRadius)
-				SetGesture ("LeftSwipe");
+				SetGesture ("left");
 		}
 
 		public void SetGesture(string _gesture) {
@@ -174,6 +179,13 @@ public class MobileInput : MonoBehaviour
 
 		public string GetGesture() {
 			return gesture;
+		}
+
+		public void Reset() {
+			start = new Vector2 (0, 0);
+			end = new Vector2 (0, 0);
+			direction = new Vector2 (0, 0);
+			SetGesture ("");
 		}
 	}
 

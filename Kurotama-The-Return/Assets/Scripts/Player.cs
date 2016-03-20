@@ -41,7 +41,12 @@ public class Player : MonoBehaviour {
 
 	void Update() {
 		bool touchSupported = true;
-		Vector2 input = (touchSupported)?new Vector2(phone.GetLeftAction(), phone.GetRightAction()):new Vector2 (Input.GetAxisRaw ("Horizontal"), Input.GetAxisRaw ("Vertical"));
+		Vector2 input = new Vector2(0, 0);
+		if (phone.GetGestures() == "taphold" || phone.GetGestures() == "right")
+			input = new Vector2(1, 1);
+		if (phone.GetGestures() == "left")
+			input = new Vector2(-1, 1);
+		print("In player: " +phone.GetGestures());
 
 
 		int wallDirX = (controller.collisions.left) ? -1 : 1;
@@ -74,7 +79,12 @@ public class Player : MonoBehaviour {
 
 		}
 
-		if (Input.GetKeyDown (KeyCode.Space)) {
+		if (Input.GetKeyDown (KeyCode.Space) || phone.GetGestures() == "up" || phone.GetGestures() == "upleft" || phone.GetGestures() == "upright"	) {
+			if (phone.GetGestures() == "upleft")
+				//input = new Vector2 (-1, 1);
+			if (phone.GetGestures() == "upright")
+				//input = new Vector2 (1, 1);
+			
 			if (wallSliding) {
 				if (wallDirX == input.x) {
 					velocity.x = -wallDirX * wallJumpClimb.x;
@@ -93,7 +103,7 @@ public class Player : MonoBehaviour {
 				velocity.y = maxJumpVelocity;
 			}
 		}
-		if (Input.GetKeyUp (KeyCode.Space)) {
+		if (Input.GetKeyUp (KeyCode.Space) || phone.GetGestures() == "") {
 			if (velocity.y > minJumpVelocity) {
 				velocity.y = minJumpVelocity;
 			}
