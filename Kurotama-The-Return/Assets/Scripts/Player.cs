@@ -2,7 +2,7 @@
 using System.Collections;
 
 [RequireComponent (typeof (Controller2D))]
-[RequireComponent (typeof (ControllerPhone))]
+[RequireComponent (typeof (MobileInput))]
 public class Player : MonoBehaviour {
 
 	public float maxJumpHeight = 4;
@@ -27,15 +27,11 @@ public class Player : MonoBehaviour {
 	float velocityXSmoothing;
 
 	Controller2D controller;
-	ControllerPhone phone;
+	MobileInput phone;
 
 	void Start() {
 		controller = GetComponent<Controller2D> ();
-		phone = GetComponent<ControllerPhone> ();
-
-		Vector2 phoneDimensions = phone.GetScreenDimensions ();
-		print ("Width: " + phoneDimensions.x + " Height: " + phoneDimensions.y);
-
+		phone = GetComponent<MobileInput> ();
 
 		gravity = -(2 * maxJumpHeight) / Mathf.Pow (timeToJumpApex, 2);
 		maxJumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
@@ -44,36 +40,14 @@ public class Player : MonoBehaviour {
 	}
 
 	void Update() {
+		bool touchSupported = true;
+		Vector2 input = (touchSupported)?new Vector2(phone.GetLeftAction(), phone.GetRightAction()):new Vector2 (Input.GetAxisRaw ("Horizontal"), Input.GetAxisRaw ("Vertical"));
 
-		Vector2 input = new Vector2 (Input.GetAxisRaw ("Horizontal"), Input.GetAxisRaw ("Vertical"));
-		int nbTouches = Input.touchCount;
-
-		if(nbTouches > 0)
-		{
-			print(nbTouches + " touch(es) detected");
-
-			for (int i = 0; i < nbTouches; i++)
-			{
-				Touch touch = Input.GetTouch(i);
-
-				print("Touch index " + touch.fingerId + " detected at position " + touch.position);
-				input.x = 1;
-
-				if (nbTouches == 2)
-					input.y = 1;
-
-				controller.Move (velocity * Time.deltaTime, input);
-
-			}
-		}
 
 		int wallDirX = (controller.collisions.left) ? -1 : 1;
 
 		float targetVelocityX = input.x * moveSpeed;
 		velocity.x = Mathf.SmoothDamp (velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below)?accelerationTimeGrounded:accelerationTimeAirborne);
-
-
-
 
 		bool wallSliding = false;
 		if ((controller.collisions.left || controller.collisions.right) && !controller.collisions.below && velocity.y < 0) {
