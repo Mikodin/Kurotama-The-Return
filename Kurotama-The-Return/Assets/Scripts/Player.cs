@@ -41,13 +41,15 @@ public class Player : MonoBehaviour {
 
 	void Update() {
 		bool touchSupported = true;
+		Vector2 input = new Vector2 (Input.GetAxisRaw ("Horizontal"), Input.GetAxisRaw ("Vertical"));
+		/*
 		Vector2 input = new Vector2(0, 0);
 		if (phone.GetGestures() == "taphold" || phone.GetGestures() == "right")
 			input = new Vector2(1, 1);
 		if (phone.GetGestures() == "left")
 			input = new Vector2(-1, 1);
 		print("In player: " +phone.GetGestures());
-
+*/
 
 		int wallDirX = (controller.collisions.left) ? -1 : 1;
 
@@ -103,7 +105,7 @@ public class Player : MonoBehaviour {
 				velocity.y = maxJumpVelocity;
 			}
 		}
-		if (Input.GetKeyUp (KeyCode.Space) || phone.GetGestures() == "") {
+		if (Input.GetKeyUp (KeyCode.Space) || phone.GetGestures() == "release") {
 			if (velocity.y > minJumpVelocity) {
 				velocity.y = minJumpVelocity;
 			}
