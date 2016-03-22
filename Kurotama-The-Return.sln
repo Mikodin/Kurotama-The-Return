@@ -1,0 +1,23 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
+Project("{6C1F812F-ACBD-B80B-010B-A228F354FBA4}") = "Kurotama-The-Return", "Assembly-CSharp.csproj", "{135041FA-E019-83E0-128F-CB6927D0E671}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{135041FA-E019-83E0-128F-CB6927D0E671}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{135041FA-E019-83E0-128F-CB6927D0E671}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{135041FA-E019-83E0-128F-CB6927D0E671}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{135041FA-E019-83E0-128F-CB6927D0E671}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Assembly-CSharp.csproj
+	EndGlobalSection
+EndGlobal
