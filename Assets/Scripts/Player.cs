@@ -26,7 +26,6 @@ public class Player : MonoBehaviour {
 	float velocityXSmoothing;
 
 	Controller2D controller;
-	ControllerPhone phone;
 
 	void Start() {
 		controller = GetComponent<Controller2D> ();
