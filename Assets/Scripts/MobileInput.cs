@@ -8,7 +8,7 @@ public class MobileInput : MonoBehaviour {
 	public float dividerPos;
 	Pane leftPane;
 	Pane rightPane;
-	public float noActionRadius;
+	public float noActionRadius = 5;
 
 	Touch touches;
 
@@ -19,6 +19,7 @@ public class MobileInput : MonoBehaviour {
 	void Start () {
 		dividerPos = screenWidth / 3;
 		noActionRadius = dividerPos / 5;
+
 		leftPane = new Pane (0, dividerPos);
 		rightPane = new Pane (dividerPos, screenWidth);
 		g1 = new Gesture (1);

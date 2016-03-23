@@ -35,7 +35,7 @@ public class Player : MonoBehaviour
 	void Start ()
 	{
 		//touchSupported = Input.touchSupported;
-		touchSupported = true;
+		touchSupported = false;
 		controller = GetComponent<Controller2D> ();
 		phone = GetComponent<MobileInput> ();
 
@@ -87,11 +87,14 @@ public class Player : MonoBehaviour
 
 		}
 
-		if (Input.GetKeyDown (KeyCode.Space) || phone.GetGestures () == "up" || phone.GetGestures () == "upleft" || phone.GetGestures () == "upright") {
-			if (phone.GetGestures () == "upleft")
-				//input = new Vector2 (-1, 1);
-			if (phone.GetGestures () == "upright")
-				//input = new Vector2 (1, 1);
+		if (Input.GetKeyDown (KeyCode.Space) || phone.GetGestures () == "up" || phone.GetGestures () == "upleft" || phone.GetGestures () == "upright"
+			|| (Input.GetKeyDown (KeyCode.RightArrow) && Input.GetKeyDown (KeyCode.UpArrow))) {
+
+
+			if (Input.GetKeyDown (KeyCode.RightArrow) && Input.GetKeyDown (KeyCode.UpArrow)) {
+				velocity.y += (gravity * Time.deltaTime)* 50;
+				velocity.x += (gravity * Time.deltaTime)* -50;
+			}
 			
 			if (wallSliding) {
 				if (wallDirX == input.x) {
@@ -109,10 +112,19 @@ public class Player : MonoBehaviour
 				velocity.y = maxJumpVelocity;
 			}
 		}
+
 		if (Input.GetKeyUp (KeyCode.Space) || phone.GetGestures () == "release") {
 			if (velocity.y > minJumpVelocity) {
 				velocity.y = minJumpVelocity;
 			}
+		}
+		if (phone.GetGestures () == "upleft")
+			print ("upleft");
+
+		if (phone.GetGestures () == "upright") {
+			print ("Entering here?");
+			velocity.y += (gravity * Time.deltaTime)* 50;
+			velocity.x += (gravity * Time.deltaTime)* -50;
 		}
 			
 		velocity.y += gravity * Time.deltaTime;
