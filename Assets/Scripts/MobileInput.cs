@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MobileInput : MonoBehaviour
-{
+public class MobileInput : MonoBehaviour {
 	int screenWidth = Screen.width;
 	int screenHeight = Screen.height;
 	
@@ -17,8 +16,7 @@ public class MobileInput : MonoBehaviour
 	int rightAction = 0;
 	Gesture g1;
 
-	void Start ()
-	{
+	void Start () {
 		dividerPos = screenWidth / 3;
 		noActionRadius = dividerPos / 5;
 		leftPane = new Pane (0, dividerPos);
@@ -26,14 +24,14 @@ public class MobileInput : MonoBehaviour
 		g1 = new Gesture (1);
 	}
 
-	void Update ()
-	{
+	void Update () {
 		foreach (Touch touch in Input.touches) {
 			int x = 1;
 			switch (touch.phase) {
 
 			case TouchPhase.Began:
 				g1.SetStart (touch.position);
+
 				g1.SetGesture ("taphold");
 				break;
 
@@ -41,10 +39,10 @@ public class MobileInput : MonoBehaviour
 				g1.SetEnd (touch.position);
 				g1.CalculateDirection ();
 				print ("Gesture Direction: " + g1.GetDirection ());
-				g1.CalculateGesture ();
 				break;
 
 			case TouchPhase.Ended:
+				g1.CalculateGesture ();
 				print (g1.GetGesture ());
 				g1.Reset ();
 				break;
@@ -52,23 +50,19 @@ public class MobileInput : MonoBehaviour
 		}
 	}
 
-	void SetLeftAction (int _action)
-	{
+	void SetLeftAction (int _action) {
 		leftAction = _action;
 	}
 
-	public int GetLeftAction ()
-	{
+	public int GetLeftAction () {
 		return leftAction;
 	}
 
-	void SetRightAction (int _action)
-	{
+	void SetRightAction (int _action) {
 		rightAction = _action;
 	}
 
-	public int GetRightAction ()
-	{
+	public int GetRightAction () {
 		return rightAction;
 	}
 
@@ -80,19 +74,16 @@ public class MobileInput : MonoBehaviour
 		return g1.GetGesture();
 	}
 
-	struct Pane
-	{
+	struct Pane {
 		public float startPos;
 		public float endPos;
 
-		public Pane (float _startPos, float _endPos)
-		{
+		public Pane (float _startPos, float _endPos) {
 			startPos = _startPos;
 			endPos = _endPos;
 		}
 
-		public bool InBounds (Touch _touch)
-		{
+		public bool InBounds (Touch _touch) {
 			if ((_touch.position.x > startPos && _touch.position.x < endPos) && (_touch.position.y > 0 && _touch.position.y < Screen.height))
 				return true;
 			else
@@ -101,16 +92,14 @@ public class MobileInput : MonoBehaviour
 
 	}
 
-	struct Gesture
-	{
+	struct Gesture {
 		Vector2 start;
 		Vector2 end;
 		Vector2 direction; 
 		string gesture;
 		float noActionRadius;
 
-		public Gesture (int i)
-		{
+		public Gesture (int i) {
 			start = new Vector2(0,0);
 			end = new Vector2 (0, 0);
 			direction = new Vector2 (0, 0);
@@ -118,33 +107,27 @@ public class MobileInput : MonoBehaviour
 			noActionRadius = (Screen.width/3)/5;
 		}
 
-		public void SetStart (Vector2 _start)
-		{
+		public void SetStart (Vector2 _start) {
 			start = _start;
 		}
 
-		public Vector2 GetStart ()
-		{
+		public Vector2 GetStart () {
 			return start;
 		}
 
-		public void SetEnd (Vector2 _end)
-		{
+		public void SetEnd (Vector2 _end) {
 			end = _end;
 		}
 
-		public Vector2 GetEnd ()
-		{
+		public Vector2 GetEnd () {
 			return end;
 		}
 
-		public Vector2 GetDirection ()
-		{
+		public Vector2 GetDirection () {
 			return direction;
 		}
 
-		public void CalculateDirection ()
-		{
+		public void CalculateDirection (){
 			direction = end - start;
 		} 
 
