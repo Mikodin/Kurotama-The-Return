@@ -5,7 +5,6 @@ using System.Collections;
 [RequireComponent (typeof(MobileInput))]
 public class Player : MonoBehaviour
 {
-
 	public float maxJumpHeight = 4;
 	public float minJumpHeight = 1;
 	public float timeToJumpApex = .4f;
@@ -27,6 +26,9 @@ public class Player : MonoBehaviour
 	Vector3 velocity;
 	float velocityXSmoothing;
 
+	float repeatFlickTime = .25f;
+	float timeToRepeatFlickTime;
+
 	bool touchSupported;
 
 	Controller2D controller;
@@ -35,7 +37,7 @@ public class Player : MonoBehaviour
 	void Start ()
 	{
 		//touchSupported = Input.touchSupported;
-		touchSupported = false;
+		touchSupported = true;
 		controller = GetComponent<Controller2D> ();
 		phone = GetComponent<MobileInput> ();
 
@@ -48,16 +50,16 @@ public class Player : MonoBehaviour
 	void Update ()
 	{
 		Vector2 input = new Vector2 (0, 0);
-
 		if (touchSupported == true) {
 			if (phone.GetGestures () == "taphold")
 				input = new Vector2 (1, 1);
-			if (phone.GetGestures () == "leftflick")
+			if (phone.GetGestures () == "left")
 				input = new Vector2 (-1, 1);
-			//print("In player: " +phone.GetGestures());
-		} else
+		} else {
 			input = new Vector2 (Input.GetAxisRaw ("Horizontal"), Input.GetAxisRaw ("Vertical"));
-
+		}
+		string currentGesture = phone.GetGestures ();
+		print("In player: " +currentGesture);
 
 		int wallDirX = (controller.collisions.left) ? -1 : 1;
 
@@ -86,14 +88,31 @@ public class Player : MonoBehaviour
 			}
 
 		}
+		 
+		if (Input.GetKeyDown (KeyCode.Space) || phone.GetGestures () == "up" || phone.GetGestures () == "upleft" || phone.GetGestures () == "upright") {
+			print("In player: " +phone.GetGestures());
+			if (phone.GetGestures () == "upright") {
+				print ("Entering here?");
 
-		if (Input.GetKeyDown (KeyCode.Space) || phone.GetGestures () == "up" || phone.GetGestures () == "upleft" || phone.GetGestures () == "upright"
-			|| (Input.GetKeyDown (KeyCode.RightArrow) && Input.GetKeyDown (KeyCode.UpArrow))) {
+				if (timeToRepeatFlickTime > 0) {
+					//velocityXSmoothing = 0;
+					//velocity.x = 0;
+					//while (timeToRepeatFlickTime > 0) {
+						timeToRepeatFlickTime -= Time.deltaTime;
+						velocity.y += (gravity * Time.deltaTime) * 10;
+						velocity.x += (gravity * Time.deltaTime) * -10;
+				//	}
+				} else {
+					timeToRepeatFlickTime = repeatFlickTime;
+				}
 
+
+
+			}
 
 			if (Input.GetKeyDown (KeyCode.RightArrow) && Input.GetKeyDown (KeyCode.UpArrow)) {
-				velocity.y += (gravity * Time.deltaTime)* 50;
-				velocity.x += (gravity * Time.deltaTime)* -50;
+				velocity.y += (gravity * Time.deltaTime)* 10;
+				velocity.x += (gravity * Time.deltaTime)* -10;
 			}
 			
 			if (wallSliding) {
@@ -118,18 +137,15 @@ public class Player : MonoBehaviour
 				velocity.y = minJumpVelocity;
 			}
 		}
-		if (phone.GetGestures () == "upleft")
-			print ("upleft");
+		if (phone.GetGestures () == "upleft") {
 
-		if (phone.GetGestures () == "upright") {
-			print ("Entering here?");
-			velocity.y += (gravity * Time.deltaTime)* 50;
-			velocity.x += (gravity * Time.deltaTime)* -50;
 		}
+
+
 			
 		velocity.y += gravity * Time.deltaTime;
 		controller.Move (velocity * Time.deltaTime, input);
-
+		
 		if (controller.collisions.above || controller.collisions.below) {
 			velocity.y = 0;
 		}

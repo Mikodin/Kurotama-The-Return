@@ -28,24 +28,25 @@ public class MobileInput : MonoBehaviour {
 	void Update () {
 		foreach (Touch touch in Input.touches) {
 			int x = 1;
+
 			switch (touch.phase) {
 
 			case TouchPhase.Began:
 				g1.SetStart (touch.position);
-
 				g1.SetGesture ("taphold");
 				break;
 
 			case TouchPhase.Moved:
 				g1.SetEnd (touch.position);
 				g1.CalculateDirection ();
+				g1.CalculateGesture ();
 				print ("Gesture Direction: " + g1.GetDirection ());
 				break;
 
 			case TouchPhase.Ended:
-				g1.CalculateGesture ();
-				print (g1.GetGesture ());
 				g1.Reset ();
+
+				//print (g1.GetGesture ());
 				break;
 			}
 		}
@@ -151,6 +152,8 @@ public class MobileInput : MonoBehaviour {
 				SetGesture ("right");
 			else if ((direction.y > -noActionRadius || direction.y < noActionRadius) && direction.x < -noActionRadius)
 				SetGesture ("left");
+
+			//Reset ();
 		}
 
 		public void SetGesture(string _gesture) {
