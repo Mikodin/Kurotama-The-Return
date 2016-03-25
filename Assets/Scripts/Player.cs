@@ -99,20 +99,17 @@ public class Player : MonoBehaviour
 					//velocity.x = 0;
 					//while (timeToRepeatFlickTime > 0) {
 						timeToRepeatFlickTime -= Time.deltaTime;
-						velocity.y += (gravity * Time.deltaTime) * 10;
-						velocity.x += (gravity * Time.deltaTime) * -10;
+					Leap (ref velocity);
+
 				//	}
 				} else {
 					timeToRepeatFlickTime = repeatFlickTime;
 				}
-
-
-
 			}
 
 			if (Input.GetKeyDown (KeyCode.RightArrow) && Input.GetKeyDown (KeyCode.UpArrow)) {
-				velocity.y += (gravity * Time.deltaTime)* 10;
-				velocity.x += (gravity * Time.deltaTime)* -10;
+				velocity.y += (gravity * Time.deltaTime)* 5;
+				velocity.x += (gravity * Time.deltaTime)* -5;
 			}
 			
 			if (wallSliding) {
@@ -137,17 +134,22 @@ public class Player : MonoBehaviour
 				velocity.y = minJumpVelocity;
 			}
 		}
-		if (phone.GetGestures () == "upleft") {
-
-		}
 
 
-			
-		velocity.y += gravity * Time.deltaTime;
+		Jump (ref velocity);			
 		controller.Move (velocity * Time.deltaTime, input);
 		
 		if (controller.collisions.above || controller.collisions.below) {
 			velocity.y = 0;
 		}
+	}
+
+	void Jump(ref Vector3 velocity) {
+		velocity.y += gravity * Time.deltaTime;
+	}
+
+	void Leap(ref Vector3 velocity) {
+		velocity.y += (gravity * Time.deltaTime) * 5;
+		velocity.x += (gravity * Time.deltaTime) * -5;
 	}
 }
