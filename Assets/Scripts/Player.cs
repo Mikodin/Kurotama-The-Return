@@ -51,15 +51,13 @@ public class Player : MonoBehaviour
 	{
 		Vector2 input = new Vector2 (0, 0);
 		if (touchSupported == true) {
-			if (phone.GetGestures () == "taphold")
-				input = new Vector2 (1, 1);
+			if (phone.GetGestures () == "right")
+				input = new Vector2 (1, 0);
 			if (phone.GetGestures () == "left")
-				input = new Vector2 (-1, 1);
+				input = new Vector2 (-1, 0);
 		} else {
 			input = new Vector2 (Input.GetAxisRaw ("Horizontal"), Input.GetAxisRaw ("Vertical"));
 		}
-		string currentGesture = phone.GetGestures ();
-		print("In player: " +currentGesture);
 
 		int wallDirX = (controller.collisions.left) ? -1 : 1;
 
@@ -92,24 +90,11 @@ public class Player : MonoBehaviour
 		if (Input.GetKeyDown (KeyCode.Space) || phone.GetGestures () == "up" || phone.GetGestures () == "upleft" || phone.GetGestures () == "upright") {
 			print("In player: " +phone.GetGestures());
 			if (phone.GetGestures () == "upright") {
-				print ("Entering here?");
-
-				if (timeToRepeatFlickTime > 0) {
-					//velocityXSmoothing = 0;
-					//velocity.x = 0;
-					//while (timeToRepeatFlickTime > 0) {
-						timeToRepeatFlickTime -= Time.deltaTime;
-					Leap (ref velocity);
-
-				//	}
-				} else {
-					timeToRepeatFlickTime = repeatFlickTime;
-				}
+					Leap (ref velocity, 1);
 			}
 
 			if (Input.GetKeyDown (KeyCode.RightArrow) && Input.GetKeyDown (KeyCode.UpArrow)) {
-				velocity.y += (gravity * Time.deltaTime)* 5;
-				velocity.x += (gravity * Time.deltaTime)* -5;
+				Leap (ref velocity, -1);
 			}
 			
 			if (wallSliding) {
@@ -148,8 +133,9 @@ public class Player : MonoBehaviour
 		velocity.y += gravity * Time.deltaTime;
 	}
 
-	void Leap(ref Vector3 velocity) {
+	void Leap(ref Vector3 velocity, int direction) {
+		int dir = direction * -1;
 		velocity.y += (gravity * Time.deltaTime) * 5;
-		velocity.x += (gravity * Time.deltaTime) * -5;
+		velocity.x += (gravity * Time.deltaTime) * (dir *5);
 	}
 }
