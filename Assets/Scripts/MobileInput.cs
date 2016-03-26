@@ -33,7 +33,7 @@ public class MobileInput : MonoBehaviour {
 
 			case TouchPhase.Began:
 				g1.SetStart (touch.position);
-				StartCoroutine ("DelayTapHold",.20f);
+				//StartCoroutine ("DelayTapHold",.20f);
 				break;
 
 			case TouchPhase.Moved:
@@ -47,7 +47,7 @@ public class MobileInput : MonoBehaviour {
 			case TouchPhase.Ended:
 				g1.SetGesture (g1.CalculateGesture ());
 				if (g1.GetGesture () == "up" || g1.GetGesture () == "upRight" || g1.GetGesture () == "upLeft") {
-					StartCoroutine ("DelayReset", .5f);
+					StartCoroutine ("DelayReset", .3f);
 				} else
 					g1.Reset ();
 				//g1.Reset ();

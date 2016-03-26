@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using CnControls;
 
 [RequireComponent (typeof(Controller2D))]
 [RequireComponent (typeof(MobileInput))]
@@ -37,7 +38,7 @@ public class Player : MonoBehaviour
 	void Start ()
 	{
 		//touchSupported = Input.touchSupported;
-		touchSupported = true;
+		touchSupported = false;
 		controller = GetComponent<Controller2D> ();
 		phone = GetComponent<MobileInput> ();
 
@@ -56,7 +57,7 @@ public class Player : MonoBehaviour
 			if (phone.GetGestures () == "left")
 				input = new Vector2 (-1, 0);
 		} else {
-			input = new Vector2 (Input.GetAxisRaw ("Horizontal"), Input.GetAxisRaw ("Vertical"));
+			input = new Vector2 (CnInputManager.GetAxis ("Horizontal"), CnInputManager.GetAxis ("Vertical"));
 		}
 
 		int wallDirX = (controller.collisions.left) ? -1 : 1;
@@ -90,11 +91,11 @@ public class Player : MonoBehaviour
 		if (Input.GetKeyDown (KeyCode.Space) || phone.GetGestures () == "up" || phone.GetGestures () == "upleft" || phone.GetGestures () == "upright") {
 			print("In player: " +phone.GetGestures());
 			if (phone.GetGestures () == "upright") {
-					Leap (ref velocity, 1);
+					//Leap (ref velocity, 1);
 			}
 
 			if (Input.GetKeyDown (KeyCode.RightArrow) && Input.GetKeyDown (KeyCode.UpArrow)) {
-				Leap (ref velocity, -1);
+				//Leap (ref velocity, -1);
 			}
 			
 			if (wallSliding) {
