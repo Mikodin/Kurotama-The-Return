@@ -36,6 +36,8 @@ public class Player : MonoBehaviour
 
 	Controller2D controller;
 	MobileInput phone;
+	SpriteRenderer theGraphic;
+	Sprite theSprite;
 
 	void Start ()
 	{
@@ -43,6 +45,11 @@ public class Player : MonoBehaviour
 		touchSupported = false;
 		controller = GetComponent<Controller2D> ();
 		phone = GetComponent<MobileInput> ();
+
+		theGraphic = GetComponent<SpriteRenderer> ();
+		theSprite = theGraphic.sprite;
+
+
 
 		gravity = -(2 * maxJumpHeight) / Mathf.Pow (timeToJumpApex, 2);
 		maxJumpVelocity = Mathf.Abs (gravity) * timeToJumpApex;
@@ -55,10 +62,10 @@ public class Player : MonoBehaviour
 	{
 		Vector2 input = new Vector2 (CnInputManager.GetAxis ("Horizontal"), CnInputManager.GetAxis ("Vertical"));
 
-		int wallDirX = (controller.collisions.left) ? -1 : 1;
 
-		float targetVelocityX = input.x * moveSpeed;
-		velocity.x = Mathf.SmoothDamp (velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below) ? accelerationTimeGrounded : accelerationTimeAirborne);
+
+		int wallDirX = (controller.collisions.left) ? -1 : 1;
+		PlayerRun (input.x, ref velocity);
 
 		bool wallSliding = false;
 		if ((controller.collisions.left || controller.collisions.right) && !controller.collisions.below && velocity.y < 0) {
@@ -110,11 +117,17 @@ public class Player : MonoBehaviour
 		}
 
 		if (phone.GetGestures () == "upright") {
-			Leap (ref velocity, 1);
+			Leap (1, ref velocity);
 		}
 		if (phone.GetGestures () == "upleft") {
-			Leap (ref velocity, -1);
+			Leap (-1,ref velocity);
 		}
+		if (velocity.x < 0) {
+			theGraphic.flipX = true;
+		} else {
+			theGraphic.flipX = false;
+		}
+
 		Jump (ref velocity);			
 		controller.Move (velocity * Time.deltaTime, input);
 		
@@ -123,11 +136,17 @@ public class Player : MonoBehaviour
 		}
 	}
 
+	void PlayerRun(float direction, ref Vector3 velocity) {
+		float targetVelocityX = direction * moveSpeed;
+		velocity.x = Mathf.SmoothDamp (velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below) ? accelerationTimeGrounded : accelerationTimeAirborne);
+
+	}
+
 	void Jump(ref Vector3 velocity) {
 		velocity.y += gravity * Time.deltaTime;
 	}
 
-	void Leap(ref Vector3 velocity, int direction) {
+	void Leap(int direction, ref Vector3 velocity) {
 		velocity.x = direction * leap.x;
 		velocity.y = leap.y;
 	}
