@@ -38,15 +38,13 @@ public class MobileInput : MonoBehaviour {
 
 			case TouchPhase.Moved:
 				g1.SetEnd (touch.position);
-				g1.CalculateDirection ();
-				//if (g1.CalculateGesture () == "left" || g1.CalculateGesture() == "right") {
-					g1.SetGesture (g1.CalculateGesture ());
-				//} 
 				break;
 
 			case TouchPhase.Ended:
+				g1.CalculateDirection ();
 				g1.SetGesture (g1.CalculateGesture ());
-				if (g1.GetGesture () == "up" || g1.GetGesture () == "upRight" || g1.GetGesture () == "upLeft") {
+				print (g1.GetGesture ());
+				if (g1.GetGesture () == "up" || g1.GetGesture () == "upright" || g1.GetGesture () == "upleft") {
 					StartCoroutine ("DelayReset", .3f);
 				} else
 					g1.Reset ();
@@ -118,6 +116,7 @@ public class MobileInput : MonoBehaviour {
 		Vector2 direction; 
 		string gesture;
 		float noActionRadius;
+		Vector2 noActionRect;
 
 		public Gesture (int i) {
 			start = new Vector2(0,0);
@@ -125,7 +124,8 @@ public class MobileInput : MonoBehaviour {
 			direction = new Vector2 (0, 0);
 			gesture = "";
 			//noActionRadius = (Screen.width/3)/30;
-			noActionRadius = 10;
+			noActionRect = new Vector2((Screen.width/3)/5,Screen.height/10);
+			noActionRadius = 30;
 			print (noActionRadius);
 		}
 
@@ -153,6 +153,7 @@ public class MobileInput : MonoBehaviour {
 			direction = end - start;
 		} 
 
+		/*
 		public string CalculateGesture() {
 			if (Mathf.Abs (direction.x) < noActionRadius && Mathf.Abs (direction.y) < noActionRadius)
 				return "taphold";
@@ -172,6 +173,20 @@ public class MobileInput : MonoBehaviour {
 				return "right";
 			else if ((direction.y > -noActionRadius || direction.y < noActionRadius) && direction.x < -noActionRadius)
 				return "left";
+
+			else return "release";
+
+			//Reset ();
+		}
+		*/
+
+		public string CalculateGesture() {
+			if (direction.y > noActionRect.y && direction.x > -noActionRect.x && direction.x < noActionRect.x)
+				return "up";
+			else if (direction.y > noActionRect.y && direction.x < -noActionRect.x)
+				return "upleft";
+			else if (direction.y > noActionRect.y && direction.x > noActionRect.x)
+				return "upright";
 
 			else return "release";
 

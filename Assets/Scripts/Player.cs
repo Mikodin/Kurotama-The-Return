@@ -21,6 +21,8 @@ public class Player : MonoBehaviour
 	public float wallStickTime = .25f;
 	float timeToWallUnstick;
 
+	public Vector2 leap;
+
 	float gravity;
 	float maxJumpVelocity;
 	float minJumpVelocity;
@@ -46,19 +48,12 @@ public class Player : MonoBehaviour
 		maxJumpVelocity = Mathf.Abs (gravity) * timeToJumpApex;
 		minJumpVelocity = Mathf.Sqrt (2 * Mathf.Abs (gravity) * minJumpHeight);
 		print ("Gravity: " + gravity + "  Jump Velocity: " + maxJumpVelocity);
+		print ("Screen Size" + Screen.width + " " + Screen.height);
 	}
 
 	void Update ()
 	{
-		Vector2 input = new Vector2 (0, 0);
-		if (touchSupported == true) {
-			if (phone.GetGestures () == "right")
-				input = new Vector2 (1, 0);
-			if (phone.GetGestures () == "left")
-				input = new Vector2 (-1, 0);
-		} else {
-			input = new Vector2 (CnInputManager.GetAxis ("Horizontal"), CnInputManager.GetAxis ("Vertical"));
-		}
+		Vector2 input = new Vector2 (CnInputManager.GetAxis ("Horizontal"), CnInputManager.GetAxis ("Vertical"));
 
 		int wallDirX = (controller.collisions.left) ? -1 : 1;
 
@@ -90,13 +85,6 @@ public class Player : MonoBehaviour
 		 
 		if (Input.GetKeyDown (KeyCode.Space) || phone.GetGestures () == "up" || phone.GetGestures () == "upleft" || phone.GetGestures () == "upright") {
 			print("In player: " +phone.GetGestures());
-			if (phone.GetGestures () == "upright") {
-					//Leap (ref velocity, 1);
-			}
-
-			if (Input.GetKeyDown (KeyCode.RightArrow) && Input.GetKeyDown (KeyCode.UpArrow)) {
-				//Leap (ref velocity, -1);
-			}
 			
 			if (wallSliding) {
 				if (wallDirX == input.x) {
@@ -121,7 +109,12 @@ public class Player : MonoBehaviour
 			}
 		}
 
-
+		if (phone.GetGestures () == "upright") {
+			Leap (ref velocity, 1);
+		}
+		if (phone.GetGestures () == "upleft") {
+			Leap (ref velocity, -1);
+		}
 		Jump (ref velocity);			
 		controller.Move (velocity * Time.deltaTime, input);
 		
@@ -135,8 +128,7 @@ public class Player : MonoBehaviour
 	}
 
 	void Leap(ref Vector3 velocity, int direction) {
-		int dir = direction * -1;
-		velocity.y += (gravity * Time.deltaTime) * 5;
-		velocity.x += (gravity * Time.deltaTime) * (dir *5);
+		velocity.x = direction * leap.x;
+		velocity.y = leap.y;
 	}
 }
