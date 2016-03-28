@@ -32,24 +32,28 @@ public class Player : MonoBehaviour
 	float repeatFlickTime = .25f;
 	float timeToRepeatFlickTime;
 
+	public bool playerRunning;
+
 	bool touchSupported;
 
 	Controller2D controller;
 	MobileInput phone;
 	SpriteRenderer theGraphic;
+	Animator anim;
+
 	Sprite theSprite;
 
 	void Start ()
 	{
 		//touchSupported = Input.touchSupported;
+		playerRunning = false;
 		touchSupported = false;
 		controller = GetComponent<Controller2D> ();
 		phone = GetComponent<MobileInput> ();
+		anim = GetComponent<Animator> ();
 
 		theGraphic = GetComponent<SpriteRenderer> ();
 		theSprite = theGraphic.sprite;
-
-
 
 		gravity = -(2 * maxJumpHeight) / Mathf.Pow (timeToJumpApex, 2);
 		maxJumpVelocity = Mathf.Abs (gravity) * timeToJumpApex;
@@ -62,9 +66,8 @@ public class Player : MonoBehaviour
 	{
 		Vector2 input = new Vector2 (CnInputManager.GetAxis ("Horizontal"), CnInputManager.GetAxis ("Vertical"));
 
-
-
 		int wallDirX = (controller.collisions.left) ? -1 : 1;
+
 		PlayerRun (input.x, ref velocity);
 
 		bool wallSliding = false;
@@ -133,20 +136,45 @@ public class Player : MonoBehaviour
 		
 		if (controller.collisions.above || controller.collisions.below) {
 			velocity.y = 0;
+			if (controller.collisions.below) {
+				print ("On ground");
+			}
 		}
 	}
 
 	void PlayerRun(float direction, ref Vector3 velocity) {
+		if (direction == 1 || direction == -1) {
+			//playerRunning = true;
+			anim.SetBool ("running", true);
+		} else {
+			//playerRunning = false;
+			anim.SetBool ("running", false);
+
+		}
+
 		float targetVelocityX = direction * moveSpeed;
 		velocity.x = Mathf.SmoothDamp (velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below) ? accelerationTimeGrounded : accelerationTimeAirborne);
 
 	}
 
 	void Jump(ref Vector3 velocity) {
+		if (velocity.y > 0) {
+			anim.SetBool ("falling", false);
+			anim.SetBool ("jumping", true);
+		} else {
+			anim.SetBool ("jumping", false);
+			anim.SetBool ("falling", true);
+		}
+
 		velocity.y += gravity * Time.deltaTime;
 	}
 
 	void Leap(int direction, ref Vector3 velocity) {
+		if (velocity.y > 0) {
+			anim.SetBool ("leap", true);
+		} else {
+			anim.SetBool ("leap", false);
+		}
 		velocity.x = direction * leap.x;
 		velocity.y = leap.y;
 	}
