@@ -95,7 +95,14 @@ public class Player : MonoBehaviour
 		 
 		if (Input.GetKeyDown (KeyCode.Space) || phone.GetGestures () == "up" || phone.GetGestures () == "upleft" || phone.GetGestures () == "upright") {
 			print("In player: " +phone.GetGestures());
-			
+
+			if (phone.GetGestures () == "upright") {
+				Leap (1, ref velocity);
+			}
+			if (phone.GetGestures () == "upleft") {
+				Leap (-1,ref velocity);
+			}
+
 			if (wallSliding) {
 				if (wallDirX == input.x) {
 					velocity.x = -wallDirX * wallJumpClimb.x;
@@ -119,12 +126,7 @@ public class Player : MonoBehaviour
 			}
 		}
 
-		if (phone.GetGestures () == "upright") {
-			Leap (1, ref velocity);
-		}
-		if (phone.GetGestures () == "upleft") {
-			Leap (-1,ref velocity);
-		}
+
 		if (velocity.x < 0) {
 			theGraphic.flipX = true;
 		} else {
@@ -140,6 +142,9 @@ public class Player : MonoBehaviour
 				print ("On ground");
 			}
 		}
+
+
+
 	}
 
 	void PlayerRun(float direction, ref Vector3 velocity) {
