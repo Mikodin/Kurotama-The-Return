@@ -2,8 +2,10 @@
 using System.Collections;
 using CnControls;
 
+
 [RequireComponent (typeof(Controller2D))]
 [RequireComponent (typeof(MobileInput))]
+[RequireComponent(typeof(PlayerAttack))]
 public class Player : MonoBehaviour
 {
 	public float maxJumpHeight = 4;
@@ -38,6 +40,7 @@ public class Player : MonoBehaviour
 
 	Controller2D controller;
 	MobileInput phone;
+	PlayerAttack attack;
 	SpriteRenderer theGraphic;
 	Animator anim;
 
@@ -50,7 +53,9 @@ public class Player : MonoBehaviour
 		touchSupported = false;
 		controller = GetComponent<Controller2D> ();
 		phone = GetComponent<MobileInput> ();
+		attack = GetComponent<PlayerAttack> ();
 		anim = GetComponent<Animator> ();
+
 
 		theGraphic = GetComponent<SpriteRenderer> ();
 		theSprite = theGraphic.sprite;
@@ -139,9 +144,18 @@ public class Player : MonoBehaviour
 		if (controller.collisions.above || controller.collisions.below) {
 			velocity.y = 0;
 			if (controller.collisions.below) {
-				print ("On ground");
 			}
 		}
+
+		if(Input.GetKeyDown(KeyCode.F)) {
+			//print ("true all day");
+			attack.setAttack(true);
+		}
+		if (Input.GetKeyUp (KeyCode.F)) {
+			attack.setAttack (false);
+			//print ("false all day");
+		}
+
 
 
 
