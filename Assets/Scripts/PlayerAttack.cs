@@ -13,6 +13,7 @@ public class PlayerAttack : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
+
 		attacking = false;
 		print ("SwordHilt at: " + swordHilt.transform.position + " SwordTip at: " + swordTip.transform.position);
 	}
@@ -32,7 +33,7 @@ public class PlayerAttack : MonoBehaviour
 			print (hit.ToString());
 			Debug.DrawRay (swordHilt.transform.position, hitDir);
 			Debug.DrawRay (swordTip.transform.position, hitDir);
-
+			//print (hit.collider.name);
 			if (hit.collider != null)
 			{
 				print ("Hit ma niggaaa");
