@@ -69,11 +69,17 @@ public class Player : MonoBehaviour
 
 	void Update ()
 	{
-		Vector2 input = new Vector2 (CnInputManager.GetAxis ("Horizontal"), CnInputManager.GetAxis ("Vertical"));
+		Vector2 input = new Vector2();
 
-		int wallDirX = (controller.collisions.left) ? -1 : 1;
+		foreach (Touch touch in Input.touches) {
+			
+			if (phone.leftPane.InBounds (touch)) {
+				input = new Vector2 (CnInputManager.GetAxis ("Horizontal"), CnInputManager.GetAxis ("Vertical"));
+			}
+		}
 
 		PlayerRun (input.x, ref velocity);
+		int wallDirX = (controller.collisions.left) ? -1 : 1;
 
 		bool wallSliding = false;
 		if ((controller.collisions.left || controller.collisions.right) && !controller.collisions.below && velocity.y < 0) {
@@ -98,13 +104,13 @@ public class Player : MonoBehaviour
 
 		}
 		 
-		if (Input.GetKeyDown (KeyCode.Space) || phone.GetGestures () == "up" || phone.GetGestures () == "upleft" || phone.GetGestures () == "upright") {
-			print("In player: " +phone.GetGestures());
+		if (Input.GetKeyDown (KeyCode.Space) || phone.GetLeftGestures () == "up" || phone.GetLeftGestures () == "upleft" || phone.GetLeftGestures () == "upright") {
+			print("In player: " +phone.GetLeftGestures());
 
-			if (phone.GetGestures () == "upright") {
+			if (phone.GetLeftGestures () == "upright") {
 				Leap (1, ref velocity);
 			}
-			if (phone.GetGestures () == "upleft") {
+			if (phone.GetLeftGestures () == "upleft") {
 				Leap (-1,ref velocity);
 			}
 
@@ -125,7 +131,7 @@ public class Player : MonoBehaviour
 			}
 		}
 
-		if (Input.GetKeyUp (KeyCode.Space) || phone.GetGestures () == "release") {
+		if (Input.GetKeyUp (KeyCode.Space) || phone.GetLeftGestures () == "release") {
 			if (velocity.y > minJumpVelocity) {
 				velocity.y = minJumpVelocity;
 			}
@@ -147,29 +153,43 @@ public class Player : MonoBehaviour
 			}
 		}
 
-		if(phone.GetGestures () == "upleft" || phone.GetGestures () == "upright") {
+		if (phone.GetRightGestures () == "upleft" || phone.GetRightGestures () == "upright") {
 			//print ("true all day");
-			attack.setAttack(true);
-			attack.highAttack ();
+			attack.setAttack (true);
+			if(phone.GetRightGestures() == "upleft")
+				attack.highAttack (-1);
+
+			if(phone.GetRightGestures() == "upright")
+				attack.highAttack (1);
+
+		} else if (phone.GetRightGestures () == "left" || phone.GetRightGestures () == "right") {
+			//print ("true all day");
+			attack.setAttack (true);
+			if(phone.GetRightGestures() == "left")
+				attack.midAttack (-1);
+
+			if(phone.GetRightGestures() == "right")
+				attack.midAttack (1);
+
+		} else if (phone.GetRightGestures () == "downleft" || phone.GetRightGestures () == "downright") {
+			//print ("true all day");
+			attack.setAttack (true);
+			if(phone.GetRightGestures() == "downleft")
+				attack.lowAttack (-1);
+
+			if(phone.GetRightGestures() == "downright")
+				attack.lowAttack (1);
 		}
 
-		if(phone.GetGestures () == "left" || phone.GetGestures () == "right") {
-			//print ("true all day");
-			attack.setAttack(true);
-			attack.midAttack ();
-		}
-
-		if(phone.GetGestures () == "downleft" || phone.GetGestures () == "downright") {
-			//print ("true all day");
-			attack.setAttack(true);
-			attack.lowAttack ();
+		if (phone.GetRightGestures() == "release" || phone.GetRightGestures() == "") {
+			attack.setAttack (false);
 		}
 
 
 		if(Input.GetKeyDown(KeyCode.R)) {
 			//print ("true all day");
 			attack.setAttack(true);
-			attack.highAttack ();
+			attack.highAttack (1);
 		}
 		if (Input.GetKeyUp (KeyCode.R)) {
 			attack.setAttack (false);
@@ -179,7 +199,7 @@ public class Player : MonoBehaviour
 		if(Input.GetKeyDown(KeyCode.F)) {
 			//print ("true all day");
 			attack.setAttack(true);
-			attack.midAttack ();
+			attack.midAttack (1);
 		}
 		if (Input.GetKeyUp (KeyCode.F)) {
 			attack.setAttack (false);
@@ -189,7 +209,7 @@ public class Player : MonoBehaviour
 		if(Input.GetKeyDown(KeyCode.C)) {
 			//print ("true all day");
 			attack.setAttack(true);
-			attack.lowAttack ();
+			attack.lowAttack (1);
 		}
 		if (Input.GetKeyUp (KeyCode.C)) {
 			attack.setAttack (false);

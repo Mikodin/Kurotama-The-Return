@@ -39,6 +39,7 @@ public class PlayerAttack : MonoBehaviour
 				print ("Hit");
 				//Enemy e = hit.collider.gameObject.GetComponent<Enemy>();
 				//e.DamageEntity(Damage);
+				setAttack(false);
 			}
 		}
 	}
@@ -66,39 +67,45 @@ public class PlayerAttack : MonoBehaviour
 		swordTip.transform.position = temp;
 	}
 
-	public void highAttack ()
+	public void highAttack (int dir)
 	{
-		if (theSprite.flipX == false) {
-			setSwordHilt (1);
-			setSwordTip (1, 1.89f, .92f);
+		if (dir > 0) {
+			theSprite.flipX = false;
+			setSwordHilt (dir);
+			setSwordTip (dir, 1.89f, .92f);
 		} else {
-			setSwordHilt (-1);
-			setSwordTip (1, -1.89f, .92f);
+			theSprite.flipX = true;
+			setSwordHilt (dir);
+			setSwordTip (dir, -1.89f, .92f);
 
 		}
 	}
 
-	public void midAttack ()
+	public void midAttack (int dir)
 	{
 		Vector3 temp = swordHilt.transform.position;
-		if (theSprite.flipX == false) {
-			setSwordHilt (1);
-			setSwordTip (1, 1.89f, -.43f);
+		if (dir > 0) {
+			theSprite.flipX = false;
+			setSwordHilt (dir);
+			setSwordTip (dir, 1.89f, -.43f);
 		} else {
-			setSwordHilt (-1);
-			setSwordTip (1, -1.89f, -.43f);
+			theSprite.flipX = true;
+			setSwordHilt (dir);
+			setSwordTip (dir, -1.89f, -.43f);
 		}
 	}
 
-	public void lowAttack ()
+	public void lowAttack (int dir)
 	{
 		Vector3 temp = swordHilt.transform.position;
-		if (theSprite.flipX == false) {
-			setSwordHilt (1);
-			setSwordTip (1, 1.89f, -.92f);
+		if (dir > 0) {
+			theSprite.flipX = false;
+			setSwordHilt (dir);
+			setSwordTip (dir, 1.89f, -.92f);
 		} else {
-			setSwordHilt (-1);
-			setSwordTip (1, -1.89f, -.92f);
+			theSprite.flipX = true;
+			setSwordHilt (dir);
+			setSwordTip (dir, -1.89f, -.92f);
 		}
 	}
 

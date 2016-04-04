@@ -1,107 +1,131 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MobileInput : MonoBehaviour {
+public class MobileInput : MonoBehaviour
+{
 	int screenWidth = Screen.width;
 	int screenHeight = Screen.height;
 	
 	public float dividerPos;
-	Pane leftPane;
-	Pane rightPane;
+	public Pane leftPane;
+	public Pane rightPane;
 	public float noActionRadius = 5;
 
 	Touch touches;
 
-	int leftAction = 0;
-	int rightAction = 0;
-	Gesture g1;
+	Gesture leftGesture;
+	Gesture rightGesture;
 
-	void Start () {
+	void Start ()
+	{
 		dividerPos = screenWidth / 3;
 		noActionRadius = dividerPos / 5;
 
 		leftPane = new Pane (0, dividerPos);
 		rightPane = new Pane (dividerPos, screenWidth);
-		g1 = new Gesture (1);
+		leftGesture = new Gesture (1);
+		rightGesture = new Gesture (1);
 	}
 
-	void Update () {
+	void Update ()
+	{
 		foreach (Touch touch in Input.touches) {
 			int x = 1;
 
 			switch (touch.phase) {
 
 			case TouchPhase.Began:
-				g1.SetStart (touch.position);
+				if (leftPane.InBounds (touch)) {
+					leftGesture.SetStart (touch.position);
+				}
+
+				if (rightPane.InBounds (touch)) {
+					rightGesture.SetStart (touch.position);
+				}
 				//StartCoroutine ("DelayTapHold",.20f);
 				break;
 
 			case TouchPhase.Moved:
-				g1.SetEnd (touch.position);
+				if (leftPane.InBounds (touch)) {
+					leftGesture.SetEnd (touch.position);
+				}
+
+				if (rightPane.InBounds (touch)) {
+					rightGesture.SetEnd (touch.position);
+				}
 				break;
 
 			case TouchPhase.Ended:
-				g1.CalculateDirection ();
-				g1.SetGesture (g1.CalculateGesture ());
-				print (g1.GetGesture ());
-				if (g1.GetGesture () == "up" || g1.GetGesture () == "upright" || g1.GetGesture () == "upleft") {
-					StartCoroutine ("DelayReset", .3f);
-				} else
-					g1.Reset ();
-				//g1.Reset ();
+				if (leftPane.InBounds (touch)) {
+					leftGesture.CalculateDirection ();
+					leftGesture.SetGesture (leftGesture.CalculateLeftPaneGesture ());
+					print ("Left Gesture: " + leftGesture.GetGesture ());
+					if (leftGesture.GetGesture () == "up" || leftGesture.GetGesture () == "upright" || leftGesture.GetGesture () == "upleft") {
+						StartCoroutine ("DelayResetLeftGesture", .3f);
+					} else {
+						leftGesture.Reset ();
+					}
+				}
 
-				//g1.SetGesture("release");
-				//print (g1.GetGesture ());
+				if (rightPane.InBounds (touch)) {
+					rightGesture.CalculateDirection ();
+					rightGesture.SetGesture (rightGesture.CalculateRightPaneGesture ());
+					print ("Right Gesture: " + rightGesture.GetGesture ());
+					if (rightGesture.GetGesture () == "left" || rightGesture.GetGesture () == "right" ||
+					    rightGesture.GetGesture () == "upright" || rightGesture.GetGesture () == "upleft" ||
+					    rightGesture.GetGesture () == "downright" || rightGesture.GetGesture () == "downleft") {
+							
+						StartCoroutine ("DelayResetRightGesture", .2f);
+					} else {
+						rightGesture.Reset ();
+					}
+				}
 				break;
 			}
 		}
 	}
 
-	IEnumerator DelayTapHold(float time) {
-		yield return new WaitForSeconds(time);
-		g1.SetGesture ("taphold");
+	IEnumerator DelayTapHold (float time)
+	{
+		yield return new WaitForSeconds (time);
+		leftGesture.SetGesture ("taphold");
 	}
 
-	IEnumerator DelayReset(float time) {
-		yield return new WaitForSeconds(time);
-		g1.Reset ();
-
+	IEnumerator DelayResetRightGesture (float time)
+	{
+		yield return new WaitForSeconds (time);
+		rightGesture.Reset ();
 	}
 
-	void SetLeftAction (int _action) {
-		leftAction = _action;
+	IEnumerator DelayResetLeftGesture (float time)
+	{
+		yield return new WaitForSeconds (time);
+		leftGesture.Reset ();
 	}
 
-	public int GetLeftAction () {
-		return leftAction;
+	public string GetLeftGestures ()
+	{
+		return leftGesture.GetGesture ();
 	}
 
-	void SetRightAction (int _action) {
-		rightAction = _action;
+	public string GetRightGestures ()
+	{
+		return rightGesture.GetGesture ();
 	}
 
-	public int GetRightAction () {
-		return rightAction;
-	}
-
-	public float GetNoActionRadius() {
-		return noActionRadius;
-	}
-
-	public string GetGestures() {
-		return g1.GetGesture();
-	}
-
-	struct Pane {
+	public struct Pane
+	{
 		public float startPos;
 		public float endPos;
 
-		public Pane (float _startPos, float _endPos) {
+		public Pane (float _startPos, float _endPos)
+		{
 			startPos = _startPos;
 			endPos = _endPos;
 		}
 
-		public bool InBounds (Touch _touch) {
+		public bool InBounds (Touch _touch)
+		{
 			if ((_touch.position.x > startPos && _touch.position.x < endPos) && (_touch.position.y > 0 && _touch.position.y < Screen.height))
 				return true;
 			else
@@ -110,54 +134,62 @@ public class MobileInput : MonoBehaviour {
 
 	}
 
-	struct Gesture {
+	public struct Gesture
+	{
 		Vector2 start;
 		Vector2 end;
-		Vector2 direction; 
+		Vector2 direction;
 		string gesture;
 		float noActionRadius;
 		Vector2 noActionRect;
 
-		public Gesture (int i) {
-			start = new Vector2(0,0);
+		public Gesture (int i)
+		{
+			start = new Vector2 (0, 0);
 			end = new Vector2 (0, 0);
 			direction = new Vector2 (0, 0);
 			gesture = "";
-			//noActionRadius = (Screen.width/3)/30;
-			noActionRect = new Vector2((Screen.width/3)/5,Screen.height/10);
+			noActionRadius = (Screen.width/3)/30;
+			noActionRect = new Vector2 ((Screen.width / 3) / 5, Screen.height / 10);
 			noActionRadius = 30;
 			print (noActionRadius);
 		}
 
-		public void SetStart (Vector2 _start) {
+		public void SetStart (Vector2 _start)
+		{
 			start = _start;
 		}
 
-		public Vector2 GetStart () {
+		public Vector2 GetStart ()
+		{
 			return start;
 		}
 
-		public void SetEnd (Vector2 _end) {
+		public void SetEnd (Vector2 _end)
+		{
 			end = _end;
 		}
 
-		public Vector2 GetEnd () {
+		public Vector2 GetEnd ()
+		{
 			return end;
 		}
 
-		public Vector2 GetDirection () {
+		public Vector2 GetDirection ()
+		{
 			return direction;
 		}
 
-		public void CalculateDirection (){
+		public void CalculateDirection ()
+		{
 			direction = end - start;
-		} 
+		}
 
-		/*
-		public string CalculateGesture() {
-			if (Mathf.Abs (direction.x) < noActionRadius && Mathf.Abs (direction.y) < noActionRadius)
-				return "taphold";
-			else if (direction.x > noActionRadius && direction.y > noActionRadius)
+
+		public string CalculateRightPaneGesture ()
+		{
+
+			if (direction.x > noActionRadius && direction.y > noActionRadius)
 				return "upright";
 			else if (direction.x < -noActionRadius && direction.y > noActionRadius)
 				return "upleft";
@@ -173,45 +205,41 @@ public class MobileInput : MonoBehaviour {
 				return "right";
 			else if ((direction.y > -noActionRadius || direction.y < noActionRadius) && direction.x < -noActionRadius)
 				return "left";
-
-			else return "release";
-
-			//Reset ();
+			else
+				return "release";
 		}
-		*/
 
-		public string CalculateGesture() {
+
+		public string CalculateLeftPaneGesture ()
+		{
 			if (direction.y > noActionRect.y && direction.x > -noActionRect.x && direction.x < noActionRect.x)
 				return "up";
 			else if (direction.y > noActionRect.y && direction.x < -noActionRect.x)
 				return "upleft";
 			else if (direction.y > noActionRect.y && direction.x > noActionRect.x)
 				return "upright";
-
-			else return "release";
-
-			//Reset ();
+			else
+				return "release";
 		}
-	
-		public void SetGesture(string _gesture) {
+
+		public void SetGesture (string _gesture)
+		{
 			gesture = _gesture;
 		}
 
-		public string GetGesture() {
+		public string GetGesture ()
+		{
 			return gesture;
 		}
 
-
-
-
-		public void Reset() {
+		public void Reset ()
+		{
 			start = new Vector2 (0, 0);
 			end = new Vector2 (0, 0);
 			direction = new Vector2 (0, 0);
 			SetGesture ("");
 		}
 	}
-
 }
 
 
