@@ -147,6 +147,25 @@ public class Player : MonoBehaviour
 			}
 		}
 
+		if(phone.GetGestures () == "upleft" || phone.GetGestures () == "upright") {
+			//print ("true all day");
+			attack.setAttack(true);
+			attack.highAttack ();
+		}
+
+		if(phone.GetGestures () == "left" || phone.GetGestures () == "right") {
+			//print ("true all day");
+			attack.setAttack(true);
+			attack.midAttack ();
+		}
+
+		if(phone.GetGestures () == "downleft" || phone.GetGestures () == "downright") {
+			//print ("true all day");
+			attack.setAttack(true);
+			attack.lowAttack ();
+		}
+
+
 		if(Input.GetKeyDown(KeyCode.R)) {
 			//print ("true all day");
 			attack.setAttack(true);
