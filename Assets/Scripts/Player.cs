@@ -147,11 +147,32 @@ public class Player : MonoBehaviour
 			}
 		}
 
+		if(Input.GetKeyDown(KeyCode.R)) {
+			//print ("true all day");
+			attack.setAttack(true);
+			attack.highAttack ();
+		}
+		if (Input.GetKeyUp (KeyCode.R)) {
+			attack.setAttack (false);
+			//print ("false all day");
+		}
+
 		if(Input.GetKeyDown(KeyCode.F)) {
 			//print ("true all day");
 			attack.setAttack(true);
+			attack.midAttack ();
 		}
 		if (Input.GetKeyUp (KeyCode.F)) {
+			attack.setAttack (false);
+			//print ("false all day");
+		}
+
+		if(Input.GetKeyDown(KeyCode.C)) {
+			//print ("true all day");
+			attack.setAttack(true);
+			attack.lowAttack ();
+		}
+		if (Input.GetKeyUp (KeyCode.C)) {
 			attack.setAttack (false);
 			//print ("false all day");
 		}

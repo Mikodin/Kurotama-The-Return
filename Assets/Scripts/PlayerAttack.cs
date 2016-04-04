@@ -12,6 +12,10 @@ public class PlayerAttack : MonoBehaviour
 
 	private bool attacking;
 
+	public Vector2 highSwordTipOffset;
+	public Vector2 midSwordTipOffset;
+	public Vector2 lowSwordTipOffset;
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -22,28 +26,6 @@ public class PlayerAttack : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		
-		Vector3 temp = swordHilt.transform.position;
-		if (theSprite.flipX == false) {
-			temp.x = owner.transform.position.x + .84f;
-			temp.y = owner.transform.position.y - .43f;
-			swordHilt.transform.position = temp;
-
-			temp = swordTip.transform.position;
-			temp.x = owner.transform.position.x + 1.89f;
-			temp.y = owner.transform.position.y + .92f;
-			swordTip.transform.position = temp;
-		} else {
-			temp.x = owner.transform.position.x - .84f;
-			temp.y = owner.transform.position.y - .43f;
-			swordHilt.transform.position = temp;
-
-			temp = swordTip.transform.position;
-			temp.x = ((owner.transform.position.x - 1.89f));
-			temp.y = owner.transform.position.y + .92f;
-			swordTip.transform.position = temp;
-		}
-
 		if (attacking) {
 			Vector3 hitDir = swordTip.transform.position - swordHilt.transform.position;
 			float hitDistance = hitDir.magnitude;
@@ -58,6 +40,65 @@ public class PlayerAttack : MonoBehaviour
 				//Enemy e = hit.collider.gameObject.GetComponent<Enemy>();
 				//e.DamageEntity(Damage);
 			}
+		}
+	}
+
+	private void setSwordHilt (int dir)
+	{
+		Vector3 temp = swordHilt.transform.position;
+		if (dir == 1) {
+			temp.x = owner.transform.position.x + .84f;
+			temp.y = owner.transform.position.y - .43f;
+			swordHilt.transform.position = temp;
+		} else if (dir == -1) {
+			temp.x = owner.transform.position.x - .84f;
+			temp.y = owner.transform.position.y - .43f;
+			swordHilt.transform.position = temp;
+		}
+	}
+
+	private void setSwordTip (int dir, float offsetX, float offsetY)
+	{
+		Vector3 temp = swordHilt.transform.position;
+		temp = swordTip.transform.position;
+		temp.x = owner.transform.position.x + offsetX;
+		temp.y = owner.transform.position.y + offsetY;
+		swordTip.transform.position = temp;
+	}
+
+	public void highAttack ()
+	{
+		if (theSprite.flipX == false) {
+			setSwordHilt (1);
+			setSwordTip (1, 1.89f, .92f);
+		} else {
+			setSwordHilt (-1);
+			setSwordTip (1, -1.89f, .92f);
+
+		}
+	}
+
+	public void midAttack ()
+	{
+		Vector3 temp = swordHilt.transform.position;
+		if (theSprite.flipX == false) {
+			setSwordHilt (1);
+			setSwordTip (1, 1.89f, -.43f);
+		} else {
+			setSwordHilt (-1);
+			setSwordTip (1, -1.89f, -.43f);
+		}
+	}
+
+	public void lowAttack ()
+	{
+		Vector3 temp = swordHilt.transform.position;
+		if (theSprite.flipX == false) {
+			setSwordHilt (1);
+			setSwordTip (1, 1.89f, -.92f);
+		} else {
+			setSwordHilt (-1);
+			setSwordTip (1, -1.89f, -.92f);
 		}
 	}
 
