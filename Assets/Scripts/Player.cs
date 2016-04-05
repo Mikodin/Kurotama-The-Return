@@ -140,7 +140,7 @@ public class Player : MonoBehaviour
 
 		if (velocity.x < 0) {
 			theGraphic.flipX = true;
-		} else {
+		} else if (velocity.x > 0){
 			theGraphic.flipX = false;
 		}
 
@@ -215,10 +215,6 @@ public class Player : MonoBehaviour
 			attack.setAttack (false);
 			//print ("false all day");
 		}
-
-
-
-
 	}
 
 	void PlayerRun(float direction, ref Vector3 velocity) {
@@ -228,12 +224,11 @@ public class Player : MonoBehaviour
 		} else {
 			//playerRunning = false;
 			anim.SetBool ("running", false);
-
 		}
 
 		float targetVelocityX = direction * moveSpeed;
-		velocity.x = Mathf.SmoothDamp (velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below) ? accelerationTimeGrounded : accelerationTimeAirborne);
-
+		velocity.x = Mathf.SmoothDamp (velocity.x, targetVelocityX, ref velocityXSmoothing, 
+			(controller.collisions.below) ? accelerationTimeGrounded : accelerationTimeAirborne);
 	}
 
 	void Jump(ref Vector3 velocity) {

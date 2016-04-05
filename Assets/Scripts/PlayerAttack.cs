@@ -37,8 +37,8 @@ public class PlayerAttack : MonoBehaviour
 			//print (hit.collider.name);
 			if (hit.collider != null) {
 				print ("Hit");
-				//Enemy e = hit.collider.gameObject.GetComponent<Enemy>();
-				//e.DamageEntity(Damage);
+				Enemy e = hit.collider.gameObject.GetComponent<Enemy>();
+				e.Damage(100);
 				setAttack(false);
 			}
 		}
