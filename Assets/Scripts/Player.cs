@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 using CnControls;
+using UnityEngine.UI;
 
 [RequireComponent (typeof(Controller2D))]
 [RequireComponent (typeof(MobileInput))]
 public class Player : MonoBehaviour
 {
+
 	public float maxJumpHeight = 4;
 	public float minJumpHeight = 1;
 	public float timeToJumpApex = .4f;
@@ -43,8 +45,15 @@ public class Player : MonoBehaviour
 
 	Sprite theSprite;
 
+	private int textstage; //if textstage == x and isShowing == false and texttimer = 0 or isShowing == true and texttimer != 0
+	private bool isShowing;
+	private float texttimer;
+	public Text dialogue;
+
 	void Start ()
 	{
+
+
 		//touchSupported = Input.touchSupported;
 		playerRunning = false;
 		touchSupported = false;
@@ -60,10 +69,17 @@ public class Player : MonoBehaviour
 		minJumpVelocity = Mathf.Sqrt (2 * Mathf.Abs (gravity) * minJumpHeight);
 		print ("Gravity: " + gravity + "  Jump Velocity: " + maxJumpVelocity);
 		print ("Screen Size" + Screen.width + " " + Screen.height);
+
+
+		textstage = 0;
+		isShowing = false;
+		texttimer = 0;
+		dialogue.text = " ";
 	}
 
 	void Update ()
 	{
+
 		Vector2 input = new Vector2 (CnInputManager.GetAxis ("Horizontal"), CnInputManager.GetAxis ("Vertical"));
 
 		int wallDirX = (controller.collisions.left) ? -1 : 1;
@@ -137,9 +153,52 @@ public class Player : MonoBehaviour
 		if (controller.collisions.above || controller.collisions.below) {
 			velocity.y = 0;
 			if (controller.collisions.below) {
-				print ("On ground");
+				//print ("On ground");
 			}
 		}
+
+
+		print ("Timer is " + texttimer + ", Stage is " + textstage + ", xpos is " + this.transform.position.x);
+
+		if (texttimer != 0) {
+			if (texttimer > 0) {
+				texttimer = texttimer - Time.deltaTime; 
+			} else {
+				texttimer = 0;
+			}
+		}
+
+		if (texttimer == 0 && isShowing == true) {
+			isShowing = false;
+			dialogue.text = " ";
+		}
+
+
+		if ((textstage == 0 && isShowing == false && texttimer == 0 && this.transform.position.x > 2) || (textstage == 0 && isShowing == true && texttimer != 0 && this.transform.position.x > 2)) {
+		textstage = 1;
+		dialogue.color = Color.white;
+		isShowing = true;
+		texttimer = 4;
+		dialogue.text = "Hi! I am working properly.";
+		}
+
+		if ((textstage == 1 && isShowing == false && texttimer == 0 && this.transform.position.x > 8) || (textstage == 1 && isShowing == true && texttimer != 0 && this.transform.position.x > 8)) {
+		textstage = 2;
+		dialogue.color = Color.white;
+		isShowing = true;
+		texttimer = 4;
+		dialogue.text = "I am continuing to work properly.";
+		}
+
+		if ((textstage == 2 && isShowing == false && texttimer == 0 && this.transform.position.x > 15) || (textstage == 2 && isShowing == true && texttimer != 0 && this.transform.position.x > 15)) {
+		textstage = 3;
+		dialogue.color = Color.red;
+		isShowing = true;
+		texttimer = 4;
+		dialogue.text = "Kuro is speaking this line.";
+		}
+
+
 	}
 
 	void PlayerRun(float direction, ref Vector3 velocity) {
