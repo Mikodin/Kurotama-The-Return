@@ -44,6 +44,9 @@ public class Player : MonoBehaviour
 	SpriteRenderer theGraphic;
 	Animator anim;
 
+
+
+
 	Sprite theSprite;
 
 	void Start ()
@@ -56,6 +59,11 @@ public class Player : MonoBehaviour
 		attack = GetComponent<PlayerAttack> ();
 		anim = GetComponent<Animator> ();
 
+		anim.SetBool ("running", false);
+		anim.SetBool ("jumping", false);
+		anim.SetBool ("upAttack", false);
+		anim.SetBool ("dwnAttack", false);
+		anim.SetBool ("midAttack", false);
 
 		theGraphic = GetComponent<SpriteRenderer> ();
 		theSprite = theGraphic.sprite;
@@ -137,7 +145,6 @@ public class Player : MonoBehaviour
 			}
 		}
 
-
 		if (velocity.x < 0) {
 			theGraphic.flipX = true;
 		} else if (velocity.x > 0){
@@ -156,33 +163,49 @@ public class Player : MonoBehaviour
 		if (phone.GetRightGestures () == "upleft" || phone.GetRightGestures () == "upright") {
 			//print ("true all day");
 			attack.setAttack (true);
-			if(phone.GetRightGestures() == "upleft")
+			if (phone.GetRightGestures () == "upleft") {
 				attack.highAttack (-1);
+				anim.SetBool ("upAttack", true);
+			}
 
-			if(phone.GetRightGestures() == "upright")
+			if (phone.GetRightGestures () == "upright") {
 				attack.highAttack (1);
-
+				anim.SetBool ("upAttack", true);
+			}
+				
 		} else if (phone.GetRightGestures () == "left" || phone.GetRightGestures () == "right") {
 			//print ("true all day");
 			attack.setAttack (true);
-			if(phone.GetRightGestures() == "left")
+			if (phone.GetRightGestures () == "left") {
 				attack.midAttack (-1);
+				anim.SetBool ("midAttack", true);
 
-			if(phone.GetRightGestures() == "right")
+			}
+
+			if (phone.GetRightGestures () == "right") {
 				attack.midAttack (1);
+				anim.SetBool ("midAttack", true);
+			}
 
 		} else if (phone.GetRightGestures () == "downleft" || phone.GetRightGestures () == "downright") {
 			//print ("true all day");
 			attack.setAttack (true);
-			if(phone.GetRightGestures() == "downleft")
+			if (phone.GetRightGestures () == "downleft") {
 				attack.lowAttack (-1);
+				anim.SetBool ("dwnAttack", true);
+			}
 
-			if(phone.GetRightGestures() == "downright")
+			if (phone.GetRightGestures () == "downright") {
 				attack.lowAttack (1);
+				anim.SetBool ("dwnAttack", true);
+			}
 		}
 
 		if (phone.GetRightGestures() == "release" || phone.GetRightGestures() == "") {
 			attack.setAttack (false);
+			anim.SetBool ("upAttack", false);
+			anim.SetBool ("midAttack", false);
+			anim.SetBool ("dwnAttack", false);
 		}
 
 
@@ -215,6 +238,7 @@ public class Player : MonoBehaviour
 			attack.setAttack (false);
 			//print ("false all day");
 		}
+			
 	}
 
 	void PlayerRun(float direction, ref Vector3 velocity) {
@@ -233,11 +257,9 @@ public class Player : MonoBehaviour
 
 	void Jump(ref Vector3 velocity) {
 		if (velocity.y > 0) {
-			anim.SetBool ("falling", false);
 			anim.SetBool ("jumping", true);
 		} else {
 			anim.SetBool ("jumping", false);
-			anim.SetBool ("falling", true);
 		}
 
 		velocity.y += gravity * Time.deltaTime;

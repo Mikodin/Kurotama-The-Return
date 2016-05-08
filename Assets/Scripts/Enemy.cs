@@ -13,7 +13,6 @@ public class Enemy : MonoBehaviour
 		anim = GetComponent<Animator> ();
 		theGraphic = GetComponent<SpriteRenderer> ();
 		anim.SetBool ("dead", false);
-		anim.SetBool ("dieing", false);
 	}
 	
 	// Update is called once per frame
