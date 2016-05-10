@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
-using UnityEngine.UI; 
+using UnityEngine.UI;
 using System.Collections;
 using CnControls;
 
 
 [RequireComponent (typeof(Controller2D))]
 [RequireComponent (typeof(MobileInput))]
-[RequireComponent(typeof(PlayerAttack))]
+[RequireComponent (typeof(PlayerAttack))]
 public class Player : MonoBehaviour
 {
 	public float maxJumpHeight = 4;
@@ -45,7 +45,8 @@ public class Player : MonoBehaviour
 	SpriteRenderer theGraphic;
 	Animator anim;
 
-	private int textstage; //if textstage == x and isShowing == false and texttimer = 0 or isShowing == true and texttimer != 0
+	private int textstage;
+	//if textstage == x and isShowing == false and texttimer = 0 or isShowing == true and texttimer != 0
 	private bool isShowing;
 	private float texttimer;
 	public Text dialogue;
@@ -86,7 +87,7 @@ public class Player : MonoBehaviour
 
 	void Update ()
 	{
-		Vector2 input = new Vector2();
+		Vector2 input = new Vector2 ();
 		foreach (Touch touch in Input.touches) {
 			if (phone.leftPane.InBounds (touch)) {
 				input = new Vector2 (CnInputManager.GetAxis ("Horizontal"), CnInputManager.GetAxis ("Vertical"));
@@ -124,13 +125,12 @@ public class Player : MonoBehaviour
 		}
 		 
 		if (Input.GetKeyDown (KeyCode.Space) || phone.GetLeftGestures () == "up" || phone.GetLeftGestures () == "upleft" || phone.GetLeftGestures () == "upright") {
-			print("In player: " +phone.GetLeftGestures());
 
 			if (phone.GetLeftGestures () == "upright") {
 				Leap (1, ref velocity);
 			}
 			if (phone.GetLeftGestures () == "upleft") {
-				Leap (-1,ref velocity);
+				Leap (-1, ref velocity);
 			}
 
 			if (wallSliding) {
@@ -158,7 +158,7 @@ public class Player : MonoBehaviour
 
 		if (velocity.x < 0) {
 			theGraphic.flipX = true;
-		} else if (velocity.x > 0){
+		} else if (velocity.x > 0) {
 			theGraphic.flipX = false;
 		}
 
@@ -171,88 +171,57 @@ public class Player : MonoBehaviour
 			}
 		}
 			
-				if (phone.GetRightGestures () == "upleft" || phone.GetRightGestures () == "upright") {
-					//print ("true all day");
-					attack.setAttack (true);
-					if (phone.GetRightGestures () == "upleft") {
-						attack.highAttack (-1);
-						anim.SetBool ("highAttack", true);
-					}
+		if (phone.GetRightGestures () == "upleft" || phone.GetRightGestures () == "upright") {
+			//print ("true all day");
+			attack.setAttack (true);
+			if (phone.GetRightGestures () == "upleft") {
+				attack.highAttack (-1);
+				anim.SetBool ("highAttack", true);
+			}
 
-					if (phone.GetRightGestures () == "upright") {
-						attack.highAttack (1);
-						anim.SetBool ("highAttack", true);
-					}
+			if (phone.GetRightGestures () == "upright") {
+				attack.highAttack (1);
+				anim.SetBool ("highAttack", true);
+			}
 				
-				} else if (phone.GetRightGestures () == "left" || phone.GetRightGestures () == "right") {
-					//print ("true all day");
-					attack.setAttack (true);
-					if (phone.GetRightGestures () == "left") {
-						attack.midAttack (-1);
-						anim.SetBool ("midAttack", true);
+		} else if (phone.GetRightGestures () == "left" || phone.GetRightGestures () == "right") {
+			//print ("true all day");
+			attack.setAttack (true);
+			if (phone.GetRightGestures () == "left") {
+				attack.midAttack (-1);
+				anim.SetBool ("midAttack", true);
 
-					}
+			}
 
-					if (phone.GetRightGestures () == "right") {
-						attack.midAttack (1);
-						anim.SetBool ("midAttack", true);
-					}
+			if (phone.GetRightGestures () == "right") {
+				attack.midAttack (1);
+				anim.SetBool ("midAttack", true);
+			}
 
-				} else if (phone.GetRightGestures () == "downleft" || phone.GetRightGestures () == "downright") {
-					//print ("true all day");
-					attack.setAttack (true);
-					if (phone.GetRightGestures () == "downleft") {
-						attack.lowAttack (-1);
-						anim.SetBool ("lowAttack", true);
-					}
+		} else if (phone.GetRightGestures () == "downleft" || phone.GetRightGestures () == "downright") {
+			//print ("true all day");
+			attack.setAttack (true);
+			if (phone.GetRightGestures () == "downleft") {
+				attack.lowAttack (-1);
+				anim.SetBool ("lowAttack", true);
+			}
 
-					if (phone.GetRightGestures () == "downright") {
-						attack.lowAttack (1);
-						anim.SetBool ("lowAttack", true);
-					}
-				}
+			if (phone.GetRightGestures () == "downright") {
+				attack.lowAttack (1);
+				anim.SetBool ("lowAttack", true);
+			}
+		}
 
 
-		if (phone.GetRightGestures() == "release" || phone.GetRightGestures() == "") {
+		if (phone.GetRightGestures () == "release" || phone.GetRightGestures () == "") {
 			attack.setAttack (false);
 			anim.SetBool ("highAttack", false);
 			anim.SetBool ("midAttack", false);
 			anim.SetBool ("lowAttack", false);
 		}
 
-		if (phone.GetLeftGestures() == "release" || phone.GetLeftGestures() == "") {
+		if (phone.GetLeftGestures () == "release" || phone.GetLeftGestures () == "") {
 
-		}
-
-
-		if(Input.GetKeyDown(KeyCode.R)) {
-			//print ("true all day");
-			attack.setAttack(true);
-			attack.highAttack (1);
-		}
-		if (Input.GetKeyUp (KeyCode.R)) {
-			attack.setAttack (false);
-			//print ("false all day");
-		}
-
-		if(Input.GetKeyDown(KeyCode.F)) {
-			//print ("true all day");
-			attack.setAttack(true);
-			attack.midAttack (1);
-		}
-		if (Input.GetKeyUp (KeyCode.F)) {
-			attack.setAttack (false);
-			//print ("false all day");
-		}
-
-		if(Input.GetKeyDown(KeyCode.C)) {
-			//print ("true all day");
-			attack.setAttack(true);
-			attack.lowAttack (1);
-		}
-		if (Input.GetKeyUp (KeyCode.C)) {
-			attack.setAttack (false);
-			//print ("false all day");
 		}
 
 		// print ("Timer is " + texttimer + ", Stage is " + textstage + ", xpos is " + this.transform.position.x);
@@ -294,9 +263,10 @@ public class Player : MonoBehaviour
 			texttimer = 4;
 			dialogue.text = "Kuro is speaking this line.";
 		}
-	}
-
-	void PlayerRun(float direction, ref Vector3 velocity) {
+	} //Update
+		
+	void PlayerRun (float direction, ref Vector3 velocity)
+	{
 		if (direction == 1 || direction == -1) {
 			//playerRunning = true;
 			anim.SetBool ("running", true);
@@ -306,10 +276,10 @@ public class Player : MonoBehaviour
 		float targetVelocityX = direction * moveSpeed;
 		velocity.x = Mathf.SmoothDamp (velocity.x, targetVelocityX, ref velocityXSmoothing, 
 			(controller.collisions.below) ? accelerationTimeGrounded : accelerationTimeAirborne);
-
 	}
 
-	void Jump(ref Vector3 velocity) {
+	void Jump (ref Vector3 velocity)
+	{
 		if (velocity.y > 0) {
 			// anim.SetBool ("jumping", true);
 		} else {
@@ -319,7 +289,8 @@ public class Player : MonoBehaviour
 		velocity.y += gravity * Time.deltaTime;
 	}
 
-	void Leap(int direction, ref Vector3 velocity) {
+	void Leap (int direction, ref Vector3 velocity)
+	{
 		if (velocity.y > 0) {
 			//anim.SetBool ("leap", true);
 		} else {

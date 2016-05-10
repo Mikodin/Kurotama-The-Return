@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[RequireComponent (typeof(Controller2D))]
 public class Enemy : MonoBehaviour
 {
 	public int health;
+	public bool deathAnim;
 	Animator anim;
 	SpriteRenderer theGraphic;
-
 	// Use this for initialization
 	void Start ()
 	{
@@ -30,8 +31,17 @@ public class Enemy : MonoBehaviour
 	}
 
 	public void Kill() {
-		anim.SetBool ("dead", true);
-	}
+		if (deathAnim) {
+			anim.SetBool ("dead", true);
+		} else {
+			theGraphic.flipY = true;
+			Destroy (gameObject);
+			//gameObject.transform.Rote
+		}
+	}		
+
+
+
 
 	public int GetHealth() {
 		return health;
