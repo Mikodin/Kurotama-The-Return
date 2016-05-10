@@ -212,6 +212,11 @@ public class MobileInput : MonoBehaviour
 
 		public string CalculateLeftPaneGesture ()
 		{
+			
+			if (direction.x > noActionRect.x && direction.y > -noActionRect.y && direction.y < noActionRect.y)
+				return "right";
+			if (direction.x < -noActionRect.x && direction.y > -noActionRect.y && direction.y < noActionRect.y)
+				return "left";
 			if (direction.y > noActionRect.y && direction.x > -noActionRect.x && direction.x < noActionRect.x)
 				return "up";
 			else if (direction.y > noActionRect.y && direction.x < -noActionRect.x)
