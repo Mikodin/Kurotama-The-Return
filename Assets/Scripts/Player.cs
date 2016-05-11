@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using CnControls;
-using UnityEditor.SceneManagement;
+//using UnityEditor.SceneManagement;
 
 
 [RequireComponent (typeof(Controller2D))]
@@ -302,7 +302,7 @@ public class Player : MonoBehaviour
 			dialogue.text = "Normal attack?  What's NORMAL about this? What did you just do!";
 		}
 
-		if ((textstage == 7 && isShowing == false && texttimer == 0 && this.transform.position.x > -8) || (textstage == 7 && isShowing == true && texttimer != 0 && this.transform.position.x > -8)) {
+		if ((textstage == 7 && isShowing == false && texttimer == 0 && this.transform.position.x > -8.5) || (textstage == 7 && isShowing == true && texttimer != 0 && this.transform.position.x > -8.5)) {
 			textstage = 8;
 			dialogue.color = Color.red;
 			isShowing = true;
@@ -310,7 +310,7 @@ public class Player : MonoBehaviour
 			dialogue.text = "Accurate enough...though this body lacks any strength." + "\n" + "Go to the next one and swipe your right thumb up and to the right to decapitate it!";
 		}
 
-		if ((textstage == 8 && isShowing == false && texttimer == 0 && this.transform.position.x > -7) || (textstage == 8 && isShowing == true && texttimer != 0 && this.transform.position.x > -7)) {
+		if ((textstage == 8 && isShowing == false && texttimer == 0 && this.transform.position.x > 0) || (textstage == 8 && isShowing == true && texttimer != 0 && this.transform.position.x > -0)) {
 			textstage = 9;
 			dialogue.color = Color.red;
 			isShowing = true;
@@ -318,7 +318,7 @@ public class Player : MonoBehaviour
 			dialogue.text = "Nice! Very good job!" +"\n" +"I can get used to this, and you should be used to me by now";
 		}
 
-		if ((textstage == 9 && isShowing == false && texttimer == 0 && this.transform.position.x > -6.5) || (textstage == 9 && isShowing == true && texttimer != 0 && this.transform.position.x > -6.5)) {
+		if ((textstage == 9 && isShowing == false && texttimer == 0 && this.transform.position.x > 1) || (textstage == 9 && isShowing == true && texttimer != 0 && this.transform.position.x > 1)) {
 			textstage = 10;
 			dialogue.color = Color.white;
 			isShowing = true;
@@ -326,12 +326,26 @@ public class Player : MonoBehaviour
 			dialogue.text = "Hey! Just who are you anyway!?";
 		}
 
-		if ((textstage == 10 && isShowing == false && texttimer == 0 && this.transform.position.x > -6) || (textstage == 10 && isShowing == true && texttimer != 0 && this.transform.position.x > -6)) {
+		if ((textstage == 10 && isShowing == false && texttimer == 0 && this.transform.position.x > 2) || (textstage == 10 && isShowing == true && texttimer != 0 && this.transform.position.x > 2)) {
 			textstage = 11;
 			dialogue.color = Color.red;
 			isShowing = true;
-			texttimer = 4;
+			texttimer = 6;
 			dialogue.text = "Oh, how rude of me!  My apologies, I am too focused on saving the world!" + "\n" +"I am Kurotama, the best Samuraii the world has ever seen" +"\n" +"We are about to become very good friends";
+		}
+		if ((textstage == 11 && isShowing == false && texttimer == 0 && this.transform.position.x > 10) || (textstage == 10 && isShowing == true && texttimer != 0 && this.transform.position.x > 10)) {
+			textstage = 12;
+			dialogue.color = Color.red;
+			isShowing = true;
+			texttimer = 6;
+			dialogue.text = "Lets see if this puny body can wall jump!" + "\n" +"With your left thumb swipe up and to the right" +"\n" +"When you hit the wall swipe up and to the left";
+		}
+		if ((textstage == 12 && isShowing == false && texttimer == 0 && this.transform.position.x > 80) || (textstage == 10 && isShowing == true && texttimer != 0 && this.transform.position.x > 80)) {
+			textstage = 13;
+			dialogue.color = Color.red;
+			isShowing = true;
+			texttimer = 6;
+			dialogue.text = "One step closer to saving the world!";
 		}
 	} //Update
 		
@@ -375,7 +389,7 @@ public class Player : MonoBehaviour
 		healthText.text = "Health: " +health.ToString ();
 
 		if (health <= 0) {
-			EditorSceneManager.LoadScene ("Kurotama");
+			//EditorSceneManager.LoadScene ("Kurotama");
 		}
 	}
 }
