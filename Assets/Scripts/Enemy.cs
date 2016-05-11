@@ -33,6 +33,8 @@ public class Enemy : MonoBehaviour
 	float accelerationTimeGrounded = .1f;
 	float accelerationTimeAirborne = .2f;
 
+	bool attack = true;
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -50,12 +52,12 @@ public class Enemy : MonoBehaviour
 	void Update ()
 	{
 		//Vector3 hitDir = swordTip.transform.position - swordHilt.transform.position;
-		Vector3 rightDir = new Vector3(180,0,0);
-		Vector3 leftSight = new Vector3(-180,0,0);
+		Vector3 rightDir = new Vector3 (180, 0, 0);
+		Vector3 leftSight = new Vector3 (-180, 0, 0);
 		RaycastHit2D attackRay;
 
-		RaycastHit2D rightSideSight = Physics2D.Raycast (gameObject.transform.position, rightDir,SightDistance, PlayerLayer);
-		RaycastHit2D leftSideSight = Physics2D.Raycast (gameObject.transform.position, leftSight,SightDistance, PlayerLayer);
+		RaycastHit2D rightSideSight = Physics2D.Raycast (gameObject.transform.position, rightDir, SightDistance, PlayerLayer);
+		RaycastHit2D leftSideSight = Physics2D.Raycast (gameObject.transform.position, leftSight, SightDistance, PlayerLayer);
 		if (CanLeap) {
 			attackRay = Physics2D.Raycast (gameObject.transform.position, leftSight, LeapDistance, PlayerLayer);
 
@@ -76,12 +78,10 @@ public class Enemy : MonoBehaviour
 
 			if (leftSideSight.collider != null) {
 				if (attackRay.collider != null) {
-					EnemyLeap (-1,ref velocity);
-
-					Player p = attackRay.collider.gameObject.GetComponent<Player>();
-	
+					EnemyLeap (-1, ref velocity);
+					Player p = attackRay.collider.gameObject.GetComponent<Player> ();
 					AttackPlayer (p);
-					Kill ();
+					attack = false;
 				}
 				EnemyRun (-1, ref velocity);
 			}
@@ -92,18 +92,28 @@ public class Enemy : MonoBehaviour
 			if (controller.collisions.below) {
 			}
 		}
-		controller.Move (velocity * Time.deltaTime, new Vector2(1,0));
+		controller.Move (velocity * Time.deltaTime, new Vector2 (1, 0));
 
 	}
 
-	void AttackPlayer(Player player) {
-		if (CanLeap) {
-			//Player p = hit.collider.gameObject.GetComponent<Player>();
-			player.Damage(75);
-			//setAttack(false);
-			//player.Damage (50);
+	void AttackPlayer (Player player)
+	{
+		if (attack) {
+			if (CanLeap) {
+				//Player p = hit.collider.gameObject.GetComponent<Player>();
+				player.Damage (damage * 2);
+				anim.SetBool ("attacking", true);
+
+				//setAttack(false);
+				//player.Damage (50);
+			} else {
+				//player.Damage (damage);
+				anim.SetBool ("attacking", true);
+
+			}
+			//Kill ();
 		}
-		player.Damage (50);
+		attack = true;
 	}
 
 	void EnemyRun (float direction, ref Vector3 velocity)
@@ -126,15 +136,17 @@ public class Enemy : MonoBehaviour
 		velocity.y = leap.y;
 	}
 
-	public void Damage(int dmg) {
+	public void Damage (int dmg)
+	{
 		health -= dmg;
 		anim.SetBool ("dieing", true);
 		if (health <= 0) {
-			Kill();
+			Kill ();
 		}
 	}
 
-	public void Kill() {
+	public void Kill ()
+	{
 		if (deathAnim) {
 			anim.SetBool ("dead", true);
 		} else {
@@ -143,7 +155,7 @@ public class Enemy : MonoBehaviour
 			}
 			StartCoroutine ("DelayedDestroyObject", .3f);
 		}
-	}		
+	}
 
 	IEnumerator DelayedDestroyObject (float time)
 	{
@@ -153,11 +165,13 @@ public class Enemy : MonoBehaviour
 	}
 
 
-	public int GetHealth() {
+	public int GetHealth ()
+	{
 		return health;
 	}
 
-	public void SetHealth(int h) {
+	public void SetHealth (int h)
+	{
 		health = h;
 	}
 }

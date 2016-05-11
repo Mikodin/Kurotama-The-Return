@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using CnControls;
+using UnityEditor.SceneManagement;
 
 
 [RequireComponent (typeof(Controller2D))]
@@ -308,5 +309,9 @@ public class Player : MonoBehaviour
 	public void Damage(int  dmg) {
 		health -= dmg;
 		healthText.text = "Health: " +health.ToString ();
+
+		if (health <= 0) {
+			EditorSceneManager.LoadScene ("Kurotama");
+		}
 	}
 }
