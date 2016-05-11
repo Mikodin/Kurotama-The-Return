@@ -6,14 +6,29 @@ public class Enemy : MonoBehaviour
 {
 	public int health;
 	public bool deathAnim;
+
 	Animator anim;
 	SpriteRenderer theGraphic;
+
 	public LayerMask PlayerLayer;
+
 	public float SightDistance;
+	public float AttackDistance;
+	public bool CanLeap;
+	public float LeapDistance;
+	public int damage;
+	public bool GraphicFlipped;
+
 	public GameObject player;
 	Controller2D controller;
+
 	float moveSpeed = 6;
 	Vector3 velocity;
+	public Vector2 leap;
+	public float maxJumpHeight = 4;
+	public float timeToJumpApex = .4f;
+
+
 	float velocityXSmoothing;
 	float accelerationTimeGrounded = .1f;
 	float accelerationTimeAirborne = .2f;
@@ -25,7 +40,10 @@ public class Enemy : MonoBehaviour
 		anim = GetComponent<Animator> ();
 		theGraphic = GetComponent<SpriteRenderer> ();
 		anim.SetBool ("dead", false);
-		theGraphic.flipX = true;
+
+		if (GraphicFlipped) {
+			theGraphic.flipX = true;
+		}
 	}
 	
 	// Update is called once per frame
@@ -34,28 +52,58 @@ public class Enemy : MonoBehaviour
 		//Vector3 hitDir = swordTip.transform.position - swordHilt.transform.position;
 		Vector3 rightDir = new Vector3(180,0,0);
 		Vector3 leftSight = new Vector3(-180,0,0);
+		RaycastHit2D attackRay;
+
 		RaycastHit2D rightSideSight = Physics2D.Raycast (gameObject.transform.position, rightDir,SightDistance, PlayerLayer);
 		RaycastHit2D leftSideSight = Physics2D.Raycast (gameObject.transform.position, leftSight,SightDistance, PlayerLayer);
+		if (CanLeap) {
+			attackRay = Physics2D.Raycast (gameObject.transform.position, leftSight, LeapDistance, PlayerLayer);
+
+		} else {
+			attackRay = Physics2D.Raycast (gameObject.transform.position, leftSight, AttackDistance, PlayerLayer);
+		}
 		Debug.DrawRay (gameObject.transform.position, leftSight);
 		Debug.DrawRay (gameObject.transform.position, rightDir);
 
 		//Debug.DrawRay (swordTip.transform.position, hitDir);
 		//print (hit.collider.name);
 		if (rightSideSight.collider != null || leftSideSight.collider != null) {
-			print ("Hit");
+			print ("Player Seen!");
+
 			if (rightSideSight.collider != null) {
 				EnemyRun (1, ref velocity);
 			}
+
 			if (leftSideSight.collider != null) {
+				if (attackRay.collider != null) {
+					EnemyLeap (-1,ref velocity);
+
+					Player p = attackRay.collider.gameObject.GetComponent<Player>();
+	
+					AttackPlayer (p);
+					Kill ();
+				}
 				EnemyRun (-1, ref velocity);
 			}
+		}
 
-			// Player e = hit.collider.gameObject.GetComponent<Player>();
-			//e.Damage(100);
-			//setAttack(false);
+		if (controller.collisions.above || controller.collisions.below) {
+			velocity.y = 0;
+			if (controller.collisions.below) {
+			}
 		}
 		controller.Move (velocity * Time.deltaTime, new Vector2(1,0));
 
+	}
+
+	void AttackPlayer(Player player) {
+		if (CanLeap) {
+			//Player p = hit.collider.gameObject.GetComponent<Player>();
+			//e.Damage(100);
+			//setAttack(false);
+			//player.Damage (50);
+		}
+		//player.Damage (50);
 	}
 
 	void EnemyRun (float direction, ref Vector3 velocity)
@@ -72,6 +120,12 @@ public class Enemy : MonoBehaviour
 			(controller.collisions.below) ? accelerationTimeGrounded : accelerationTimeAirborne);
 	}
 
+	void EnemyLeap (int direction, ref Vector3 velocity)
+	{
+		velocity.x = direction * leap.x;
+		velocity.y = leap.y;
+	}
+
 	public void Damage(int dmg) {
 		health -= dmg;
 		anim.SetBool ("dieing", true);
@@ -84,7 +138,9 @@ public class Enemy : MonoBehaviour
 		if (deathAnim) {
 			anim.SetBool ("dead", true);
 		} else {
-			theGraphic.flipY = true;
+			if (!CanLeap) {
+				theGraphic.flipY = true;
+			}
 			StartCoroutine ("DelayedDestroyObject", .3f);
 		}
 	}		
