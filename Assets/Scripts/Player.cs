@@ -246,28 +246,92 @@ public class Player : MonoBehaviour
 		}
 
 
-		if ((textstage == 0 && isShowing == false && texttimer == 0 && this.transform.position.x > 2) || (textstage == 0 && isShowing == true && texttimer != 0 && this.transform.position.x > 2)) {
+		if ((textstage == 0 && isShowing == false && texttimer == 0 && this.transform.position.x > -22) || (textstage == 0 && isShowing == true && texttimer != 0 && this.transform.position.x > -22)) {
 			textstage = 1;
 			dialogue.color = Color.white;
 			isShowing = true;
 			texttimer = 4;
-			dialogue.text = "Hi! I am working properly.";
+			dialogue.text = "What's going on?..Who are you";
 		}
 
-		if ((textstage == 1 && isShowing == false && texttimer == 0 && this.transform.position.x > 8) || (textstage == 1 && isShowing == true && texttimer != 0 && this.transform.position.x > 8)) {
+		if ((textstage == 1 && isShowing == false && texttimer == 0 && this.transform.position.x > -21) || (textstage == 1 && isShowing == true && texttimer != 0 && this.transform.position.x > -21)) {
 			textstage = 2;
-			dialogue.color = Color.white;
-			isShowing = true;
-			texttimer = 4;
-			dialogue.text = "I am continuing to work properly.";
-		}
-
-		if ((textstage == 2 && isShowing == false && texttimer == 0 && this.transform.position.x > 15) || (textstage == 2 && isShowing == true && texttimer != 0 && this.transform.position.x > 15)) {
-			textstage = 3;
 			dialogue.color = Color.red;
 			isShowing = true;
 			texttimer = 4;
-			dialogue.text = "Kuro is speaking this line.";
+			dialogue.text = "It's been so long...and this body feels so..strange.  I can't just rush into this";
+		}
+
+		if ((textstage == 2 && isShowing == false && texttimer == 0 && this.transform.position.x > -20) || (textstage == 2 && isShowing == true && texttimer != 0 && this.transform.position.x > -20)) {
+			textstage = 3;
+			dialogue.color = Color.white;
+			isShowing = true;
+			texttimer = 4;
+			dialogue.text = "Rush into what? That's my body you're-";
+		}
+
+		if ((textstage == 3 && isShowing == false && texttimer == 0 && this.transform.position.x > -19) || (textstage == 3 && isShowing == true && texttimer != 0 && this.transform.position.x > -19)) {
+			textstage = 4;
+			dialogue.color = Color.red;
+			isShowing = true;
+			texttimer = 4;
+			dialogue.text = "These odd sculptures should make for good practice!";
+		}
+
+		if ((textstage == 4 && isShowing == false && texttimer == 0 && this.transform.position.x > -18) || (textstage == 4 && isShowing == true && texttimer != 0 && this.transform.position.x > -18)) {
+			textstage = 5;
+			dialogue.color = Color.white;
+			isShowing = true;
+			texttimer = 4;
+			dialogue.text = "What, you mean my mannequins?";
+		}
+
+		if ((textstage == 5 && isShowing == false && texttimer == 0 && this.transform.position.x > -17) || (textstage == 5 && isShowing == true && texttimer != 0 && this.transform.position.x > -17)) {
+			textstage = 6;
+			dialogue.color = Color.red;
+			isShowing = true;
+			texttimer = 4;
+			dialogue.text = "Walk up to it and swipe your right thumb forward, the angle determines the kind of normal attack";
+		}
+
+		if ((textstage == 6 && isShowing == false && texttimer == 0 && this.transform.position.x > -9.3) || (textstage == 6 && isShowing == true && texttimer != 0 && this.transform.position.x > 9.3)) {
+			textstage = 7;
+			dialogue.color = Color.white;
+			isShowing = true;
+			texttimer = 4;
+			dialogue.text = "Normal attack?  What's NORMAL about this? What did you just do!";
+		}
+
+		if ((textstage == 7 && isShowing == false && texttimer == 0 && this.transform.position.x > -8) || (textstage == 7 && isShowing == true && texttimer != 0 && this.transform.position.x > -8)) {
+			textstage = 8;
+			dialogue.color = Color.red;
+			isShowing = true;
+			texttimer = 6;
+			dialogue.text = "Accurate enough...though this body lacks any strength." + "\n" + "Go to the next one and swipe your right thumb up and to the right to decapitate it!";
+		}
+
+		if ((textstage == 8 && isShowing == false && texttimer == 0 && this.transform.position.x > -7) || (textstage == 8 && isShowing == true && texttimer != 0 && this.transform.position.x > -7)) {
+			textstage = 9;
+			dialogue.color = Color.red;
+			isShowing = true;
+			texttimer = 4;
+			dialogue.text = "Nice! Very good job!" +"\n" +"I can get used to this, and you should be used to me by now";
+		}
+
+		if ((textstage == 9 && isShowing == false && texttimer == 0 && this.transform.position.x > -6.5) || (textstage == 9 && isShowing == true && texttimer != 0 && this.transform.position.x > -6.5)) {
+			textstage = 10;
+			dialogue.color = Color.white;
+			isShowing = true;
+			texttimer = 4;
+			dialogue.text = "Hey! Just who are you anyway!?";
+		}
+
+		if ((textstage == 10 && isShowing == false && texttimer == 0 && this.transform.position.x > -6) || (textstage == 10 && isShowing == true && texttimer != 0 && this.transform.position.x > -6)) {
+			textstage = 11;
+			dialogue.color = Color.red;
+			isShowing = true;
+			texttimer = 4;
+			dialogue.text = "Oh, how rude of me!  My apologies, I am too focused on saving the world!" + "\n" +"I am Kurotama, the best Samuraii the world has ever seen" +"\n" +"We are about to become very good friends";
 		}
 	} //Update
 		

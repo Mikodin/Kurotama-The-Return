@@ -100,18 +100,15 @@ public class Enemy : MonoBehaviour
 	{
 		if (attack) {
 			if (CanLeap) {
-				//Player p = hit.collider.gameObject.GetComponent<Player>();
 				player.Damage (damage * 2);
 				anim.SetBool ("attacking", true);
 
-				//setAttack(false);
-				//player.Damage (50);
 			} else {
 				//player.Damage (damage);
 				anim.SetBool ("attacking", true);
 
 			}
-			//Kill ();
+			Kill ();
 		}
 		attack = true;
 	}
