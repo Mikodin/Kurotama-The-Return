@@ -9,6 +9,8 @@ using CnControls;
 [RequireComponent (typeof(PlayerAttack))]
 public class Player : MonoBehaviour
 {
+	public int health;
+
 	public float maxJumpHeight = 4;
 	public float minJumpHeight = 1;
 	public float timeToJumpApex = .4f;
@@ -51,6 +53,8 @@ public class Player : MonoBehaviour
 	private float texttimer;
 	public Text dialogue;
 
+	public Text healthText;
+
 
 	Sprite theSprite;
 
@@ -83,6 +87,7 @@ public class Player : MonoBehaviour
 		isShowing = false;
 		texttimer = 0;
 		dialogue.text = " ";
+		healthText.text = "Health: " +health.ToString ();
 	}
 
 	void Update ()
@@ -298,5 +303,10 @@ public class Player : MonoBehaviour
 		}
 		velocity.x = direction * leap.x;
 		velocity.y = leap.y;
+	}
+
+	public void Damage(int  dmg) {
+		health -= dmg;
+		healthText.text = "Health: " +health.ToString ();
 	}
 }

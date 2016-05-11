@@ -99,11 +99,11 @@ public class Enemy : MonoBehaviour
 	void AttackPlayer(Player player) {
 		if (CanLeap) {
 			//Player p = hit.collider.gameObject.GetComponent<Player>();
-			//e.Damage(100);
+			player.Damage(75);
 			//setAttack(false);
 			//player.Damage (50);
 		}
-		//player.Damage (50);
+		player.Damage (50);
 	}
 
 	void EnemyRun (float direction, ref Vector3 velocity)
